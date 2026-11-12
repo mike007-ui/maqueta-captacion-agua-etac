@@ -103,7 +103,7 @@ select{background:var(--surface);border:1px solid var(--line);border-radius:6px;
     <div class="card">
       <div class="eyebrow">ETAC Tulancingo · Equipo 1</div>
       <h1>Captación de agua pluvial</h1>
-      <div class="sub">Maqueta digital 3D del sistema propuesto. Arrastra para girar, rueda para acercar.</div>
+      <div class="sub">Maqueta digital 3D del sistema propuesto, hecha con Three.js (JavaScript y WebGL). Arrastra para girar, rueda para acercar.</div>
     </div>
     <div class="card">
       <h2>Lluvia</h2>
@@ -129,7 +129,7 @@ select{background:var(--surface);border:1px solid var(--line);border-radius:6px;
         <div class="stat"><div class="k">Lluvia acumulada</div><div class="v"><span id="oRain">0</span> <small>mm</small></div></div>
         <div class="stat"><div class="k">Agua captada</div><div class="v"><span id="oCap">0</span> <small>L</small></div></div>
         <div class="stat" style="grid-column:1/-1"><div class="k">Tinacos</div><div class="v"><span id="oVol">0</span> <small>/ <span id="oTank">2200</span> L</small></div><div class="bar" id="oBar"><i></i></div></div>
-        <div class="stat"><div class="k">Excedente al pozo de absorción</div><div class="v"><span id="oOver">0</span> <small>L</small></div></div>
+        <div class="stat"><div class="k">Excedente al registro de desagüe</div><div class="v"><span id="oOver">0</span> <small>L</small></div></div>
         <div class="stat"><div class="k">Agua usada (riego)</div><div class="v"><span id="oUsed">0</span> <small>L</small></div></div>
         <div class="stat"><div class="k">Caudal al tinaco</div><div class="v"><span id="oQ">0</span> <small>L/s</small></div></div>
         <div class="stat"><div class="k">Caudal de diseño</div><div class="v"><span id="oQd">0</span> <small>L/s</small></div></div>
@@ -176,13 +176,16 @@ select{background:var(--surface);border:1px solid var(--line);border-radius:6px;
         <button class="btn" data-view="fac" type="button">Fachada</button>
         <button class="btn" data-view="lat" type="button">Muro lateral</button>
         <button class="btn" data-view="caf" type="button">Techo de lámina</button>
+        <button class="btn" data-view="pas" type="button">Paso a la cancha</button>
         <button class="btn on" id="lab" type="button">Etiquetas</button>
       </div>
-      <div class="warn">La fachada del Bachillerato se modeló con fotografías de Google Maps. El muro largo (lado del estacionamiento), la cancha y el techo de lámina de la Cafetería se modelaron con fotografías tomadas en el plantel. Los dos tinacos, su base de concreto, la válvula de desvío, el pozo de absorción, las mallas y la toma para el autolavado son una propuesta: no existen en el plantel. Las medidas de la cancha, los autos y los árboles son estimadas, y las alturas son de 3 m por nivel.</div>
+      <div class="warn">La fachada del Bachillerato se modeló con fotografías de Google Maps. El muro largo (lado del estacionamiento), el pasillo hacia la cancha, la cancha y el techo de lámina de la Cafetería se modelaron con fotografías tomadas en el plantel. Los dos tinacos, su base de concreto, la válvula de desvío, el registro de desagüe, las mallas y la toma para el autolavado son una propuesta: no existen en el plantel. Las medidas de la cancha, los autos y los árboles son estimadas, y las alturas son de 3 m por nivel.</div>
     </div>
     <div class="card">
       <h2>Datos del proyecto</h2>
       <table>
+        <tr><td>Bachillerato · largo × ancho (Google Earth)</td><td>25.6 × 11.5 m</td></tr>
+        <tr><td>Cafetería · largo × ancho (Google Earth)</td><td>11.4 × 6.8 m</td></tr>
         <tr><td>Edificio de Bachillerato</td><td id="dAb"></td></tr>
         <tr><td>Cafetería</td><td id="dAc"></td></tr>
         <tr><th>Superficie de captación</th><th id="dAt"></th></tr>
@@ -193,8 +196,13 @@ select{background:var(--surface);border:1px solid var(--line);border-radius:6px;
         <tr><th>Captable al año</th><th id="dY"></th></tr>
         <tr><td>Con el promedio de la estación</td><td id="dY2"></td></tr>
         <tr><td>Separador (CONAGUA 0.40 L/m²)</td><td>148 L</td></tr>
+        <tr><td>Base de concreto de los tinacos (por medir en el plantel)</td><td id="dBase">6.45 × 2.3 × 0.15 m</td></tr>
+        <tr><td>Registro de desagüe (por medir en el plantel)</td><td>0.9 × 0.7 m</td></tr>
+        <tr><td>Software</td><td>Three.js r128 (JavaScript / WebGL)</td></tr>
       </table>
       <div class="note">V = Área × Lluvia × C. Medidas tomadas con Google Earth (imagen del 28/02/2025), con margen de ±1 m por lado, cerca de ±15 % en el área. Lluvia: SMN (estación 13041, a 0.8 km del campus) e INEGI (2010). Criterios: CONAGUA (2016), OPS/CEPIS (2004).</div>
+      <div class="note">Software: Three.js r128 (JavaScript / WebGL).</div>
+      <div class="warn">Medidas por confirmar: el registro de desagüe (0.9 × 0.7 m) y la base de concreto de los tinacos (6.45 × 2.3 m) son medidas de diseño; falta medirlas en el plantel.</div>
     </div>
   </aside>
 </div>
@@ -1276,7 +1284,7 @@ ctl.enableDamping=true; ctl.dampingFactor=0.08; ctl.maxPolarAngle=Math.PI*0.495;
 var hemi=new THREE.HemisphereLight(0xdff0fa,0x8a8f86,0.75); scene.add(hemi);
 var sun=new THREE.DirectionalLight(0xfff3dc,0.95); sun.position.set(26,42,22); sun.castShadow=true;
 sun.shadow.mapSize.set(2048,2048); var sc=sun.shadow.camera; sc.left=-45;sc.right=45;sc.top=45;sc.bottom=-45;sc.near=1;sc.far=140; sun.shadow.bias=-0.0004;
-scene.add(sun); sun.target.position.set(2,0,4); scene.add(sun.target);
+scene.add(sun); sun.target.position.set(10,0,3); scene.add(sun.target);
 var fill=new THREE.DirectionalLight(0xffffff,0.4); fill.position.set(-30,18,8); scene.add(fill);
 
 function mat(c,o){o=o||{};return new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:0.85,metalness:0.02},o));}
@@ -1292,13 +1300,13 @@ var M={
 };
 M.navy=mat(0x1f2b6b,{roughness:0.7}); M.fbar=mat(0xf3f3ef,{roughness:0.6}); M.gate=mat(0x17181b,{roughness:0.55}); M.gbar=mat(0x4a4c52,{roughness:0.5});
 M.wglass=mat(0x2b3442,{roughness:0.3,metalness:0.2}); M.louv=mat(0xc9ccca,{roughness:0.8}); M.slat=mat(0x70746f,{roughness:0.8}); M.pipeG=mat(0x9a9a98,{roughness:0.7});
-M.walk=mat(0xc2bfb6,{roughness:1}); M.road=mat(0x45484d,{roughness:1}); M.curb=mat(0xd8d5cc,{roughness:1}); M.wframe=mat(0xf0efe9,{roughness:0.8});
+M.dimM=mat(0xd98e04,{roughness:0.6}); M.walk=mat(0xc2bfb6,{roughness:1}); M.road=mat(0x45484d,{roughness:1}); M.curb=mat(0xd8d5cc,{roughness:1}); M.wframe=mat(0xf0efe9,{roughness:0.8});
 M.wallB.color.setHex(0xefece2); M.wallC.color.setHex(0xe9e7df);
 M.afr=mat(0xf1f1ee,{roughness:0.45,metalness:0.3}); M.sgl=mat(0xa9bac3,{roughness:0.2,metalness:0.3}); M.sdk=mat(0x2a323a,{roughness:0.9});
 M.wiron=mat(0xf6f6f2,{roughness:0.5}); M.brickG=mat(0x9d998c,{roughness:1}); M.blueT=mat(0x1d3fa8,{roughness:0.5}); M.pipeC=mat(0xf0ead8,{roughness:0.6});
 M.white=mat(0xe8e8e4,{roughness:1}); M.net=new THREE.MeshBasicMaterial({color:0x1d3a6e,transparent:true,opacity:0.10,side:THREE.DoubleSide,depthWrite:false});
-M.carG=mat(0x2a2d31,{roughness:0.4,metalness:0.3}); M.pine=mat(0x1f4a2b,{roughness:1});
-function noiseTex(rep1,rep2){var t=textTex(256,256,function(x,w,h){x.fillStyle='#ffffff';x.fillRect(0,0,w,h);for(var i=0;i<2600;i++){var g=200+Math.floor(Math.random()*55);x.fillStyle='rgba('+g+','+g+','+g+',0.55)';x.fillRect(Math.random()*w,Math.random()*h,1+Math.random()*3,1+Math.random()*3);}});
+M.carG=mat(0x46515c,{roughness:0.4,metalness:0.3}); M.pine=mat(0x1f4a2b,{roughness:1});
+function noiseTex(rep1,rep2){var t=textTex(256,256,function(x,w,h){x.fillStyle='#ffffff';x.fillRect(0,0,w,h);for(var i=0;i<3600;i++){var g=185+Math.floor(Math.random()*70);x.fillStyle='rgba('+g+','+g+','+g+',0.55)';x.fillRect(Math.random()*w,Math.random()*h,1+Math.random()*3,1+Math.random()*3);}});
   t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep1,rep2);return t;}
 M.wallB.map=noiseTex(10,3); M.wallC.map=noiseTex(4,2);
 var lamTex=textTex(64,64,function(x,w,h){for(var i=0;i<h;i++){var v=Math.sin(i/h*Math.PI*2)*0.5+0.5;var c=Math.round(140+v*80);x.fillStyle='rgb('+c+','+(c+5)+','+(c+9)+')';x.fillRect(0,i,w,1);}});
@@ -1306,7 +1314,19 @@ lamTex.wrapS=lamTex.wrapT=THREE.RepeatWrapping; lamTex.repeat.set(1,42); lamTex.
 M.lam=mat(0xffffff,{roughness:0.55,metalness:0.35,map:lamTex});
 var banTex=textTex(256,640,function(x,w,h){x.fillStyle='#f3f3f0';x.fillRect(0,0,w,150);x.fillStyle='#1f2b6b';x.font='600 82px Georgia,serif';x.textBaseline='middle';x.fillText('ETAC',40,78);x.fillStyle='#e8892b';x.fillRect(0,150,w,230);x.fillStyle='#1d5fa8';x.fillRect(0,380,w,260);});
 M.banner=new THREE.MeshBasicMaterial({map:banTex});
-M.concrete=mat(0xb8b6af,{roughness:1}); M.valve=mat(0xc2372b,{roughness:0.5}); M.mesh=new THREE.MeshStandardMaterial({color:0x2d3a3f,transparent:true,opacity:0.5,roughness:0.9});
+M.concrete=mat(0xb8b6af,{roughness:1}); M.valve=mat(0xc2372b,{roughness:0.5});
+M.mesh=new THREE.MeshStandardMaterial({color:0xe08a1e,roughness:0.6,metalness:0.2}); M.basket=new THREE.MeshStandardMaterial({color:0xe08a1e,roughness:0.6,wireframe:true});
+M.brickR=mat(0x96513d,{roughness:1}); M.blackT=mat(0x16191c,{roughness:0.6}); M.hose=mat(0x3f8f4a,{roughness:0.7}); M.pass=new THREE.MeshBasicMaterial({color:0x8fd18a,transparent:true,opacity:0.5});
+var linkTex=textTex(128,128,function(x,w,h){x.clearRect(0,0,w,h);x.strokeStyle='#38424b';x.lineWidth=4;x.beginPath();x.moveTo(0,0);x.lineTo(w,h);x.moveTo(w,0);x.lineTo(0,h);x.stroke();});
+linkTex.wrapS=linkTex.wrapT=THREE.RepeatWrapping; linkTex.repeat.set(30,6);
+M.pipeBl=mat(0x6eaed6,{roughness:0.6});
+M.link=new THREE.MeshBasicMaterial({map:linkTex,transparent:true,side:THREE.DoubleSide,depthWrite:false});
+var stripTex=textTex(1024,128,function(x,w,h){var cols=['#e4572e','#f3f3f0','#1d4fa8'];for(var k=-2;k<14;k++){x.fillStyle=cols[(k+3)%3];x.beginPath();x.moveTo(k*90,0);x.lineTo(k*90+90,0);x.lineTo(k*90+50,h);x.lineTo(k*90-40,h);x.closePath();x.fill();}});
+M.strip=new THREE.MeshBasicMaterial({map:stripTex,transparent:true,opacity:0.92,side:THREE.DoubleSide});
+var parkTex=textTex(1024,256,function(x,w,h){var g=x.createLinearGradient(0,0,w,0);g.addColorStop(0,'#1e63b8');g.addColorStop(1,'#2a8bd0');x.fillStyle=g;x.fillRect(0,0,w,h);x.fillStyle='#f4f4f0';x.font='700 84px Arial,sans-serif';x.textBaseline='middle';x.fillText('ESTACIONAMIENTO',40,70);x.fillStyle='#f2c230';x.font='700 62px Arial,sans-serif';x.fillText('24 HRS · AUTOLAVADO Y PENSIÓN',40,170);});
+M.park=new THREE.MeshBasicMaterial({map:parkTex});
+var billTex=textTex(512,256,function(x,w,h){x.fillStyle='#f4d21f';x.fillRect(0,0,w,h);x.fillStyle='#1b2a33';x.font='700 120px Arial,sans-serif';x.textBaseline='middle';x.fillText('T-02',150,128);});
+M.bill=new THREE.MeshBasicMaterial({map:billTex});
 var autoTex=textTex(512,128,function(x,w,h){x.fillStyle='#f2c230';x.fillRect(0,0,w,h);x.fillStyle='#1b2a33';x.font='700 52px Arial,sans-serif';x.textBaseline='middle';x.fillText('AUTOLAVADO',22,50);x.font='500 30px Arial,sans-serif';x.fillText('(por acordar)',22,100);});
 M.autoSign=new THREE.MeshBasicMaterial({map:autoTex});
 function textTex(w,h,draw){var c=document.createElement('canvas');c.width=w;c.height=h;var x=c.getContext('2d');draw(x,w,h);var t=new THREE.CanvasTexture(c);t.anisotropy=4;return t;}
@@ -1317,7 +1337,7 @@ var world=new THREE.Group(); scene.add(world);
 
 /* lluvia */
 var NR=2800, rainPos=new Float32Array(NR*6), rainSeed=[];
-for(var r=0;r<NR;r++){var x=(Math.random()-0.5)*70+2, z=(Math.random()-0.5)*56+4, y=Math.random()*32; rainSeed.push([x,z]);
+for(var r=0;r<NR;r++){var x=(Math.random()-0.5)*88+10, z=(Math.random()-0.5)*56+4, y=Math.random()*32; rainSeed.push([x,z]);
   rainPos[r*6]=x;rainPos[r*6+1]=y;rainPos[r*6+2]=z;rainPos[r*6+3]=x;rainPos[r*6+4]=y+0.7;rainPos[r*6+5]=z;}
 var rainGeo=new THREE.BufferGeometry(); rainGeo.setAttribute('position',new THREE.BufferAttribute(rainPos,3));
 var rainMat=new THREE.LineBasicMaterial({color:0xdaf1ff,transparent:true,opacity:0.7});
@@ -1354,7 +1374,7 @@ function gateDoor(x){var z=5.75;box(world,M.brickG,1.7,2.3,0.2,x,1.15,z+0.1,fals
   for(var i=0;i<8;i++)box(world,M.wiron,0.035,2.1,0.035,x-0.52+i*0.15,1.05,z+0.27,false);
   box(world,M.wiron,1.2,0.05,0.04,x,2.08,z+0.27,false);box(world,M.wiron,1.2,0.05,0.04,x,0.1,z+0.27,false);box(world,M.wiron,1.2,0.05,0.04,x,1.05,z+0.27,false);
   box(world,M.pretil,1.9,0.12,0.4,x,2.36,z+0.18,false);}
-function bRail(x){var z=5.75+0.85;box(world,M.blueT,0.06,0.95,0.06,x-1.0,0.48,z,false);box(world,M.blueT,0.06,0.95,0.06,x+1.0,0.48,z,false);box(world,M.blueT,2.06,0.06,0.06,x,0.95,z,false);}
+function bRail(x,w){var z=5.75+0.85;box(world,M.blueT,0.06,0.88,0.06,x-w/2,0.44,z,false);box(world,M.blueT,0.06,0.88,0.06,x+w/2,0.44,z,false);box(world,M.blueT,w+0.06,0.06,0.06,x,0.88,z,false);}
 function bachFacade(nb,hb,rb){
   // cornisa azul y repisa entre niveles
   fb(M.navy,11.7,0.26,0.3,0,hb-0.1,0.15);
@@ -1369,42 +1389,82 @@ function bachFacade(nb,hb,rb){
   var arc=new THREE.Mesh(new THREE.CircleGeometry(0.9,28,0,Math.PI),M.gate);arc.rotation.y=-Math.PI/2;arc.position.set(-14.2-0.13,2.0,1.1);world.add(arc);
   var ring=new THREE.Mesh(new THREE.RingGeometry(0.9,1.05,28,1,0,Math.PI),M.navy);ring.rotation.y=-Math.PI/2;ring.position.set(-14.2-0.12,2.0,1.1);world.add(ring);
   for(var g=0;g<9;g++)fb(M.gbar,0.03,2.6,0.03,0.25+g*0.2,1.3,0.14);
-  // muro largo del lado del patio (fotografías propias del plantel): ventanas corredizas, persianas, puerta con reja
-  [-12.3,-10.6].forEach(function(x){sWin(1,x,1.95,0.95,0.9);});
+  // muro largo del lado del estacionamiento (fotografías propias): pocas ventanas, en el orden real
+  // planta baja: 2 ventanas chicas, puerta con reja (nicho de ladrillo), 1 corrediza mediana, 1 corrediza grande y 2 persianas
+  sWin(1,-10.6,2.0,0.65,0.7); sWin(1,-9.65,2.0,0.7,0.7);
   gateDoor(-8.4);
-  [[-5.8,2.1],[-2.1,2.1],[1.6,2.1],[5.3,2.1],[9.0,2.1]].forEach(function(q){sWin(1,q[0],1.8,q[1],1.0);});
+  sWin(1,-6.43,1.98,1.35,1.05); sWin(1,-4.15,2.15,2.2,1.4);
+  [1.0,2.05].forEach(function(x){sLouver(x,2.1,0.7,0.85);});
   var ban=new THREE.Mesh(new THREE.PlaneGeometry(0.8,2.0),M.banner);ban.position.set(-9.75,1.05,5.75+0.42);world.add(ban);
   box(world,M.blueT,0.04,0.2,0.04,-9.75,0.08,5.75+0.4,false);
-  [-8.4,-4.6,-0.8].forEach(function(x){bRail(x);});
-  if(nb>=2){sLouver(-12.3,4.7,0.7,1.1);sLouver(-11.3,4.7,0.7,1.1);
-    [-8.2,-4.9,-1.6,1.7,5.0,8.3].forEach(function(x){sWin(1,x,4.7,1.7,1.2);});
-    // bajante rectangular existente (termina a media altura)
-    box(world,M.pipeC,0.16,hb-3.1,0.12,10.5,(hb+3.1)/2,5.75+0.13);}
+  [[-8.6,1.8],[-4.3,3.2],[-0.2,2.4]].forEach(function(q){bRail(q[0],q[1]);});
+  // llave de pared con manguera verde, bajo el muro
+  box(world,M.blueT,0.06,0.06,0.14,-5.5,0.45,5.75+0.07,false); box(world,M.hose,1.4,0.03,0.03,-6.2,0.03,5.75+0.45,false);
+  if(nb>=2){[-10.5,-9.5].forEach(function(x){sLouver(x,5.0,0.7,0.85);});
+    sWin(1,-6.2,5.05,1.25,1.25); sWin(1,-4.25,5.05,1.9,1.25);
+    [1.0,2.05].forEach(function(x){sLouver(x,5.0,0.7,0.85);});
+    // bajante rectangular existente: termina a media altura, a la derecha de las ventanas
+    box(world,M.pipeC,0.14,hb-3.7,0.1,-2.75,(hb+3.7)/2,5.75+0.12);}
+  // acceso del estacionamiento vecino (Google Maps): reja blanca corrediza y lona sobre la barda
+  var gx=-14.3; box(world,M.afr,0.06,2.0,2.9,gx,1.0,8.1,false); for(var gi=0;gi<10;gi++)box(world,M.afr,0.04,1.9,0.04,gx-0.03,1.0,6.8+gi*0.3,false);
+  box(world,M.pretil,0.1,2.6,6.4,gx,1.3,12.9,false); var pb=new THREE.Mesh(new THREE.PlaneGeometry(6.0,1.5),M.park); pb.rotation.y=-Math.PI/2; pb.position.set(gx-0.07,1.85,12.9); world.add(pb);
   // muro norte (sin fotografiar): ventanas esquemáticas
-  for(var l3=0;l3<nb;l3++){var yy=l3*3+1.7;[-12.2,-9.2,-6.2,-3.2,-0.2,2.8,5.8,8.8].forEach(function(x){sWin(-1,x,yy,1.0,1.0);});}
+  for(var l3=0;l3<nb;l3++){var yy=l3*3+1.7;[-10.5,-5.5,-0.5,4.5].forEach(function(x){sWin(-1,x,yy,1.0,1.0);});}
   // bajante existente observada en la esquina
   var bp=new THREE.Mesh(new THREE.CylinderGeometry(0.07,0.07,hb,12),M.pipeC);bp.position.set(-13.95,hb/2,5.9);bp.castShadow=true;world.add(bp);
   // banqueta y calle (orientación por confirmar)
   box(world,M.walk,1.8,0.12,120,-15.1,0.06,0,false);box(world,M.curb,0.15,0.16,120,-16.05,0.08,0,false);box(world,M.road,14,0.04,300,-23,0.02,0,false);
 }
 
-function cancha(){var cx=26.5,cz=-1,cw=14,cd=8.0,H=4.6,i;
+function cancha(cx,cz,cw,cd){var H=5.0,wH=2.6,i,x0=cx-cw/2,x1=cx+cw/2,z0=cz-cd/2,z1=cz+cd/2;
   box(world,M.patio,cw+1,0.06,cd+1,cx,0.03,cz,false);
-  var tex=textTex(1024,586,function(x,w,h){x.fillStyle='#2e6f66';x.fillRect(0,0,w,h);x.strokeStyle='#f2f4f2';x.lineWidth=7;x.strokeRect(24,24,w-48,h-48);
+  var tex=textTex(1024,586,function(x,w,h){x.fillStyle='#265f58';x.fillRect(0,0,w,h);x.strokeStyle='#e6eae4';x.lineWidth=7;x.strokeRect(24,24,w-48,h-48);
     x.beginPath();x.moveTo(w/2,24);x.lineTo(w/2,h-24);x.stroke();x.beginPath();x.arc(w/2,h/2,85,0,Math.PI*2);x.stroke();x.strokeRect(24,h/2-120,140,240);x.strokeRect(w-164,h/2-120,140,240);});
   var pl=new THREE.Mesh(new THREE.PlaneGeometry(cw,cd),new THREE.MeshStandardMaterial({map:tex,roughness:0.9}));pl.rotation.x=-Math.PI/2;pl.position.set(cx,0.075,cz);pl.receiveShadow=true;world.add(pl);
-  box(world,M.white,cw,1.6,0.2,cx,0.8,cz+cd/2+0.1,false);
-  for(i=0;i<=7;i++){var px=cx-cw/2+i*cw/7;box(world,M.blueT,0.08,H,0.08,px,H/2,cz-cd/2,false);box(world,M.blueT,0.08,H,0.08,px,H/2,cz+cd/2,false);}
-  for(i=1;i<4;i++){var pz=cz-cd/2+i*cd/4;box(world,M.blueT,0.08,H,0.08,cx-cw/2,H/2,pz,false);box(world,M.blueT,0.08,H,0.08,cx+cw/2,H/2,pz,false);}
-  box(world,M.blueT,cw,0.06,0.06,cx,H,cz-cd/2,false);box(world,M.blueT,cw,0.06,0.06,cx,H,cz+cd/2,false);box(world,M.blueT,0.06,0.06,cd,cx-cw/2,H,cz,false);box(world,M.blueT,0.06,0.06,cd,cx+cw/2,H,cz,false);
-  var n1=new THREE.Mesh(new THREE.PlaneGeometry(cw,H),M.net);n1.position.set(cx,H/2,cz-cd/2);world.add(n1);var n2=n1.clone();n2.position.z=cz+cd/2;world.add(n2);
-  var n3=new THREE.Mesh(new THREE.PlaneGeometry(cd,H),M.net);n3.rotation.y=Math.PI/2;n3.position.set(cx-cw/2,H/2,cz);world.add(n3);var n4=n3.clone();n4.position.x=cx+cw/2;world.add(n4);
-  // tablero de basquetbol con su poste
-  box(world,M.blueT,0.1,3.0,0.1,cx+cw/2-0.5,1.5,cz,false);box(world,M.blueT,1.2,0.1,0.1,cx+cw/2-1.1,3.0,cz,false);
-  box(world,M.banner,0.05,0.9,1.5,cx+cw/2-1.7,3.2,cz,false);}
-function autos(){var cols=[0xb5322b,0xe9e9e6,0x2e6f9e,0x8e9296,0x1c1d20,0x2b6a8c,0xd9a52b,0xb5322b,0x8e9296,0xe9e9e6];var pos=[[-12,10],[-6.2,10],[-3.4,10],[-0.6,10],[2.2,10],[-10,15],[-7,15],[-3,15],[22.5,10],[25.2,10]];
-  pos.forEach(function(q,i){var m=mat(cols[i],{roughness:0.4,metalness:0.4});box(world,m,1.8,0.8,4.3,q[0],0.55,q[1],true);box(world,M.carG,1.6,0.6,2.2,q[0],1.2,q[1]-0.2,true);});}
-function pinos(){[[22,-12],[29,-13.5],[36,-11]].forEach(function(q){for(var k=0;k<3;k++){var c=new THREE.Mesh(new THREE.ConeGeometry(2.1-k*0.5,4.5,10),M.pine);c.position.set(q[0],3.2+k*2.4,q[1]);c.castShadow=true;world.add(c);}});}
+  // muros blancos al norte y al oriente, con ladrillo encima (fotos 10 y 11)
+  box(world,M.white,cw+0.2,wH,0.2,cx,wH/2,z0-0.1,false); box(world,M.brickR,cw+0.2,1.7,0.2,cx,wH+0.85,z0-0.1,false);
+  box(world,M.white,0.2,wH,cd,x1+0.1,wH/2,cz,false); box(world,M.brickR,0.2,1.7,cd,x1+0.1,wH+0.85,cz,false);
+  for(i=0;i<=6;i++){var px=x0+i*cw/6;box(world,M.blueT,0.08,H,0.08,px,H/2,z0,false);box(world,M.blueT,0.08,H,0.08,px,H/2,z1,false);}
+  for(i=1;i<4;i++){var pz=z0+i*cd/4;box(world,M.blueT,0.08,H,0.08,x0,H/2,pz,false);box(world,M.blueT,0.08,H,0.08,x1,H/2,pz,false);}
+  [z0,z1].forEach(function(zz){box(world,M.blueT,cw,0.06,0.06,cx,H,zz,false);box(world,M.blueT,cw,0.05,0.05,cx,2.8,zz,false);});
+  [x0,x1].forEach(function(xx){box(world,M.blueT,0.06,0.06,cd,xx,H,cz,false);box(world,M.blueT,0.05,0.05,cd,xx,2.8,cz,false);});
+  // red sobre toda la cancha y en los lados altos
+  var tn=new THREE.Mesh(new THREE.PlaneGeometry(cw,cd),M.net);tn.rotation.x=-Math.PI/2;tn.position.set(cx,H,cz);world.add(tn);
+  var n1=new THREE.Mesh(new THREE.PlaneGeometry(cw,H-wH),M.net);n1.position.set(cx,wH+(H-wH)/2,z0);world.add(n1);
+  var n3=new THREE.Mesh(new THREE.PlaneGeometry(cd,H),M.net);n3.rotation.y=Math.PI/2;n3.position.set(x0,H/2,cz);world.add(n3);
+  var n4=new THREE.Mesh(new THREE.PlaneGeometry(cd,H-wH),M.net);n4.rotation.y=Math.PI/2;n4.position.set(x1,wH+(H-wH)/2,cz);world.add(n4);
+  // lado del estacionamiento: malla ciclónica con franja de colores (fotos 8 y 11)
+  var lk=new THREE.Mesh(new THREE.PlaneGeometry(cw,2.8),M.link);lk.position.set(cx,1.4,z1);world.add(lk);
+  var st=new THREE.Mesh(new THREE.PlaneGeometry(cw,1.3),M.strip);st.position.set(cx,1.55,z1+0.03);world.add(st);
+  var ns=new THREE.Mesh(new THREE.PlaneGeometry(cw,H-2.8),M.net);ns.position.set(cx,2.8+(H-2.8)/2,z1);world.add(ns);
+  // puerta de acceso a la cancha (por confirmar)
+  var gx=x0+1.7;box(world,M.blueT,0.07,2.3,0.07,gx-0.7,1.15,z1+0.07,false);box(world,M.blueT,0.07,2.3,0.07,gx+0.7,1.15,z1+0.07,false);box(world,M.blueT,1.47,0.07,0.07,gx,2.3,z1+0.07,false);
+  // portería pintada en el muro norte y tablero con poste
+  box(world,M.sgl,0.06,2.0,0.06,cx-1.6,1.0,z0+0.04,false);box(world,M.sgl,0.06,2.0,0.06,cx+1.6,1.0,z0+0.04,false);box(world,M.sgl,3.2,0.06,0.06,cx,2.0,z0+0.04,false);
+  box(world,M.blueT,0.1,3.0,0.1,x1-0.5,1.5,cz,false);box(world,M.blueT,1.2,0.1,0.1,x1-1.1,3.0,cz,false);
+  box(world,M.banner,0.05,0.9,1.5,x1-1.7,3.2,cz,false);
+  // tablero oscuro visto de espaldas con poste azul inclinado, esquina suroeste (fotos 13 a 16)
+  var bkx=x0+1.0,bkz=z1-1.4;box(world,mat(0x3a3d42,{roughness:0.7}),0.07,1.05,1.8,bkx,3.5,bkz,true);
+  var pole=new THREE.Mesh(new THREE.BoxGeometry(0.1,3.4,0.1),M.blueT);pole.position.set(bkx-0.25,1.7,bkz+0.35);pole.rotation.x=-0.22;pole.castShadow=true;world.add(pole);
+  box(world,M.blueT,0.1,0.1,0.9,bkx-0.1,3.0,bkz+0.4,false);
+  // vecinos: edificio de ladrillo y anuncio espectacular detrás de la cancha
+  box(world,M.brickR,9,6.4,3,cx-3,3.2,z0-5,false);
+  box(world,M.gbar,0.25,7.0,0.25,cx+4.5,3.5,z0-3.6,false);box(world,M.gbar,0.25,7.0,0.25,cx+8,3.5,z0-3.6,false);
+  var bb=new THREE.Mesh(new THREE.PlaneGeometry(7.4,3.6),M.bill);bb.position.set(cx+6.25,8.6,z0-3.45);world.add(bb);box(world,M.gbar,7.6,3.8,0.15,cx+6.25,8.6,z0-3.65,false);}
+function autos(){var cols=[0xb5322b,0xe9e9e6,0x2e6f9e,0x8e9296,0x1c1d20,0x2b6a8c,0xd9a52b,0xb5322b,0x8e9296,0xe9e9e6];
+  var pos=[[-12,10.5],[-6.2,10.5],[-3.4,10.5],[-0.6,10.5],[2.2,10.5],[-10,15.5],[-7,15.5],[-3,15.5],[22.5,10.8],[25.5,10.4],[28.5,10.4],[31.5,10.4],[34.5,10.4],[27,15.5],[30,15.5],[33,15.5]];
+  pos.forEach(function(q,i){var m=mat(cols[i%cols.length],{roughness:0.4,metalness:0.4});box(world,m,1.8,0.8,4.3,q[0],0.55,q[1],true);box(world,M.carG,1.6,0.6,2.2,q[0],1.2,q[1]-0.2,true);});
+  box(world,mat(0x1d4fa8,{roughness:0.8}),2.3,2.4,4.6,37.2,1.3,6.4,true);
+  box(world,mat(0x2f7d3a,{roughness:0.9}),2.6,2.0,2.6,41.5,1.0,5.5,true);var tr=new THREE.Mesh(new THREE.ConeGeometry(2.3,1.0,4),mat(0xd9b432,{roughness:0.9}));tr.rotation.y=Math.PI/4;tr.position.set(41.5,2.5,5.5);tr.castShadow=true;world.add(tr);}
+function techadosParking(){
+  // techos de lámina oxidada del estacionamiento y lona morada (fotos 1, 16 y 17)
+  var rust=mat(0x9c5a35,{roughness:0.9}),tarp=mat(0x8a3f8f,{roughness:0.9}),post=mat(0x4a4d52,{roughness:0.8});
+  [[26,19.5],[33,19.5]].forEach(function(q,i){var rf=new THREE.Mesh(new THREE.BoxGeometry(6.2,0.08,3.6),i?rust:mat(0x8d9aa5,{roughness:0.9}));rf.position.set(q[0],3.0,q[1]);rf.rotation.x=0.08;rf.castShadow=true;world.add(rf);
+    [[-2.9,-1.6],[2.9,-1.6],[-2.9,1.6],[2.9,1.6]].forEach(function(o){box(world,post,0.12,3.0,0.12,q[0]+o[0],1.5,q[1]+o[1],false);});});
+  var tp=new THREE.Mesh(new THREE.BoxGeometry(3.0,0.05,2.4),tarp);tp.position.set(38.5,2.6,17.5);tp.rotation.z=0.12;world.add(tp);
+  box(world,post,0.1,2.6,0.1,37.2,1.3,16.5,false);box(world,post,0.1,2.4,0.1,39.9,1.2,18.6,false);
+}
+function pinos(){[[23,-15],[30,-16.5],[37,-14]].forEach(function(q){for(var k=0;k<3;k++){var c=new THREE.Mesh(new THREE.ConeGeometry(2.1-k*0.5,4.5,10),M.pine);c.position.set(q[0],3.2+k*2.4,q[1]);c.castShadow=true;world.add(c);}});}
 
 function build(){
   while(world.children.length){var o=world.children.pop(); if(o.geometry&&o.geometry!==geo.box&&o.geometry!==geo.cyl&&o.geometry!==geo.sph)o.geometry.dispose();}
@@ -1416,8 +1476,10 @@ function build(){
 
   // suelo
   var gnd=box(world,M.ground,500,0.2,400,2,-0.1,4,false);
-  box(world,M.patio,45,0.06,12,7,0.03,12.2,false);
-  cancha(); autos(); pinos();
+  box(world,M.patio,58,0.06,14,13,0.03,13.2,false); box(world,M.patio,26,0.06,3.4,31.2,0.03,4.7,false);
+  cancha(26.5,-1,14,8); autos(); techadosParking(); pinos();
+  // paso peatonal libre: del acceso del plantel, pegado a los barandales, hasta la puerta de la cancha
+  box(world,M.pass,30.2,0.02,1.7,6.1,0.08,6.85,false); box(world,M.pass,1.4,0.02,3.7,21.2,0.08,5.15,false);
   // jardinera sobre la banqueta (Google Maps)
   box(world,M.grass,0.9,0.5,3.0,-15.1,0.3,-9,true); [-9.8,-8.4].forEach(function(zz){var s=new THREE.Mesh(geo.sph,M.shrub);s.scale.set(0.4,0.35,0.4);add(world,s,-15.1,0.7,zz);});
 
@@ -1434,6 +1496,11 @@ function build(){
   box(world,M.pretil,6.8,0.35,0.15,14.8,rc+0.17,5.62);
   // ventanas
   bachFacade(nb,hb,rb);
+  // barandal azul continuo del pasillo hacia la cancha (fotos nuevas), puesto ambulante blanco y tubería azul de pared
+  for(var rx=2.5;rx<=20.6;rx+=1.8)box(world,M.blueT,0.07,0.88,0.07,rx,0.44,7.7,false); box(world,M.blueT,18.1,0.06,0.06,11.55,0.88,7.7,false);
+  box(world,M.white,3.2,2.3,1.8,14.5,1.45,9.7); box(world,M.sgl,3.0,0.7,0.04,14.5,0.85,8.8,false);
+  box(world,M.pipeBl,14.5,0.06,0.06,3.75,0.12,5.75+0.05,false);
+  box(world,M.pretil,1.3,0.2,1.3,8.5,rb+0.1,-2.2); cyl(world,M.blackT,0.5,0.5,1.1,8.5,rb+0.75,-2.2); cyl(world,M.blackT,0.35,0.35,0.08,8.5,rb+1.34,-2.2);
   for(var lc=0;lc<nc;lc++){[-1,1].forEach(function(sg){box(world,M.glass,0.06,1.2,1.8,18.23,lc*3+1.7,sg*3.2,false);});
     box(world,M.glass,1.8,1.2,0.06,13.6,lc*3+1.7,5.73,false);box(world,M.glass,1.8,1.2,0.06,16.2,lc*3+1.7,5.73,false);}
 
@@ -1443,63 +1510,83 @@ function build(){
   box(world,M.canal,25.6,0.16,0.035,-1.4,cy,zcB+0.15);
   box(world,M.canal,25.6,0.16,0.035,-1.4,cy,zcB-0.15);
   var cwB=box(world,M.canalW,25.6,0.1,0.22,-1.4,cy-0.01,zcB,false); cwB.userData.k='canB';
-  box(world,M.mesh,25.6,0.02,0.3,-1.4,cy+0.1,zcB,false); for(var mi=0;mi<64;mi++)box(world,M.carbon,0.02,0.025,0.3,-13.9+mi*0.4,cy+0.1,zcB,false);
+  box(world,M.mesh,25.6,0.035,0.34,-1.4,cy+0.1,zcB,false); for(var mi=0;mi<64;mi++)box(world,M.carbon,0.02,0.025,0.3,-13.9+mi*0.4,cy+0.1,zcB,false);
   // canaleta Cafetería (lado este)
   var cyc=rc-0.2, xcC=18.4;
   box(world,M.canal,0.3,0.04,11.4,xcC,cyc-0.07,0);
   box(world,M.canal,0.035,0.16,11.4,xcC+0.15,cyc,0);
   box(world,M.canal,0.035,0.16,11.4,xcC-0.15,cyc,0);
   var cwC=box(world,M.canalW,0.22,0.1,11.4,xcC,cyc-0.01,0,false); cwC.userData.k='canC';
-  box(world,M.mesh,0.3,0.02,11.4,xcC,cyc+0.1,0,false); for(var mj=0;mj<28;mj++)box(world,M.carbon,0.3,0.025,0.02,xcC,cyc+0.1,-5.4+mj*0.4,false);
-  // ---- bajadas, colector, válvula de desvío, separador, filtro previo y batería de tinacos (junto al muro de la Cafetería)
-  var bxB=11.0, bzB=5.95, bxC=18.4, bzC=5.45, rz=6.7, yf=0.3, yC=0.42, nT=T.n||1, capT=S.tank/nT, t1x=15.1, tgap=1.5;
-  var tLast=t1x+(nT-1)*tgap, xL=tLast+T.r;
-  box(world,M.concrete,8.4,0.15,2.2,14.6,0.075,6.85);
-  [11.0,12.9,14.8,16.7,18.6].forEach(function(px){box(world,M.blueT,0.08,0.95,0.08,px,0.62,8.2,false);}); box(world,M.blueT,7.7,0.05,0.05,14.8,1.05,8.2,false);
-  pipe(world,P(bxB,yf,bzB),P(bxB,cy-0.05,bzB),0.055);
-  pipe(world,P(bxC,yC,bzC),P(bxC,cyc-0.05,bzC),0.055);
-  pipe(world,P(bxB,yf,bzB),P(bxB,yf,rz),0.055); pipe(world,P(bxB,yf,rz),P(11.8,yf,rz),0.055);
-  pipe(world,P(bxC,yC,bzC),P(bxC,yC,7.55),0.055); pipe(world,P(bxC,yC,7.55),P(11.4,yC,7.55),0.055); pipe(world,P(11.4,yC,7.55),P(11.4,yf,rz),0.055);
-  // válvula de desvío (primera lluvia / tinacos llenos) y ramal al pozo de absorción
-  cyl(world,M.valve,0.1,0.1,0.14,11.8,yf+0.1,rz,false); box(world,M.valve,0.32,0.04,0.04,11.8,yf+0.22,rz,false);
-  pipe(world,P(11.8,yf,rz),P(11.8,0.22,rz),0.055); pipe(world,P(11.8,0.22,rz),P(11.8,0.22,8.7),0.055); pipe(world,P(11.8,0.22,8.7),P(17.3,0.22,8.7),0.055);
-  cyl(world,M.grava,0.75,0.75,0.08,17.9,0.1,8.7,false); cyl(world,M.drain,0.5,0.5,0.1,17.9,0.12,8.7,false);
+  box(world,M.mesh,0.34,0.035,11.4,xcC,cyc+0.1,0,false); for(var mj=0;mj<28;mj++)box(world,M.carbon,0.3,0.025,0.02,xcC,cyc+0.1,-5.4+mj*0.4,false);
+  // ---- bajadas pegadas a los muros y a la malla, válvula, separador, filtro y tinacos: del lado del estacionamiento, junto a la malla sur de la cancha
+  var bxB=11.0, bzB=5.95, bxC=18.4, bzC=5.45, yT=2.7, yf=0.3, X0=24.0, Zr=4.35, zF=3.15, nT=T.n||1, capT=S.tank/nT, s1=3.3, tgap=1.5;
+  var XX=function(s){return X0+s;}, Rw=function(xo,y){return P(X0+(xo-11.8),y,Zr);};
+  var BASE_L=6.45, BASE_W=2.3, BASE_H=0.15; // base de concreto de diseño (por medir en el plantel)
+  var sLast=s1+(nT-1)*tgap, sEnd=sLast+T.r, sPit=-0.8+BASE_L+0.9, xP=XX(sPit), xU=XX(s1), xA=XX(sLast), xd=X0-0.5;
+  // líneas de cota con las medidas de Google Earth y de la base
+  var dyb=rb+0.45, dyc=rc+0.45; // por encima del techo y del pretil (rb+0.345) para que no se traslapen
+  box(world,M.dimM,25.6,0.09,0.09,-1.4,dyb,-5.95,false); box(world,M.dimM,0.05,0.05,0.5,-14.2,dyb,-5.95,false); box(world,M.dimM,0.05,0.05,0.5,11.4,dyb,-5.95,false);
+  box(world,M.dimM,0.09,0.09,11.5,-14.45,dyb,0,false); box(world,M.dimM,0.5,0.05,0.05,-14.45,dyb,-5.75,false); box(world,M.dimM,0.5,0.05,0.05,-14.45,dyb,5.75,false);
+  box(world,M.dimM,6.8,0.09,0.09,14.8,dyc,-5.95,false); box(world,M.dimM,0.05,0.05,0.5,11.4,dyc,-5.95,false); box(world,M.dimM,0.05,0.05,0.5,18.2,dyc,-5.95,false);
+  box(world,M.dimM,0.09,0.09,11.4,18.45,dyc,0,false); box(world,M.dimM,0.5,0.05,0.05,18.45,dyc,-5.7,false); box(world,M.dimM,0.5,0.05,0.05,18.45,dyc,5.7,false);
+  var s0b=-0.8, s9b=s0b+BASE_L, baseL=BASE_L;
+  box(world,M.dimM,baseL,0.04,0.04,X0+(s0b+s9b)/2,0.3,Zr+1.5,false); box(world,M.dimM,0.04,0.04,0.4,X0+s0b,0.3,Zr+1.5,false); box(world,M.dimM,0.04,0.04,0.4,X0+s9b,0.3,Zr+1.5,false);
+  box(world,M.dimM,0.04,0.04,2.3,X0+s9b+0.2,0.3,Zr,false); box(world,M.dimM,0.4,0.04,0.04,X0+s9b+0.2,0.3,Zr-1.15,false); box(world,M.dimM,0.4,0.04,0.04,X0+s9b+0.2,0.3,Zr+1.15,false);
+  var dB=document.getElementById('dBase'); if(dB)dB.textContent=baseL.toFixed(2)+' × '+BASE_W+' × '+BASE_H+' m';
+  // base de concreto con barandal azul del lado de los autos
+  var s0=-0.8, s9=s0+BASE_L, np=Math.round((s9-s0)/1.6); box(world,M.concrete,BASE_L,BASE_H,BASE_W,X0+(s0+s9)/2,BASE_H/2,Zr);
+  for(var bi=0;bi<=np;bi++){box(world,M.blueT,0.07,0.95,0.07,XX(s0+bi*(s9-s0)/np),0.62,Zr+1.12,false);} box(world,M.blueT,s9-s0,0.05,0.05,X0+(s0+s9)/2,1.05,Zr+1.12,false);
+  // tubería: baja por el muro del Bachillerato, corre a 2.7 m pegada al muro de la Cafetería y a la malla de la cancha, y baja a la base
+  pipe(world,P(bxB,yT,bzB),P(bxB,cy-0.05,bzB),0.055);
+  pipe(world,P(bxB,yT,bzB),P(bxB,yT,5.85),0.055); pipe(world,P(bxB,yT,5.85),P(bxC,yT,5.85),0.055); pipe(world,P(bxC,yT,5.85),P(bxC,yT,zF),0.055);
+  pipe(world,P(bxC,yT,bzC),P(bxC,cyc-0.05,bzC),0.055);
+  pipe(world,P(bxC,yT,zF),P(xd,yT,zF),0.055); pipe(world,P(xd,yT,zF),P(xd,yf,zF),0.055); pipe(world,P(xd,yf,zF),P(xd,yf,Zr),0.055); pipe(world,P(xd,yf,Zr),P(X0-0.12,yf,Zr),0.055);
+  [12.2,14.0,15.8,17.6].forEach(function(xx){box(world,M.pipeG,0.05,0.05,0.16,xx,yT,5.78,false);});
+  [4.6,3.7].forEach(function(zz){box(world,M.pipeG,0.2,0.05,0.05,18.3,yT,zz,false);});
+  [19.8,21.4,23.0].forEach(function(xx){box(world,M.pipeG,0.05,0.05,0.16,xx,yT,3.07,false);});
+  // canastillas de malla en la entrada de cada bajada
+  cyl(world,M.basket,0.13,0.13,0.3,bxB,cy+0.05,zcB,false); cyl(world,M.basket,0.13,0.13,0.3,bxC,cyc+0.05,bzC,false);
+  // válvula de desvío y ramal al registro de desagüe
+  cyl(world,M.valve,0.1,0.1,0.14,X0,yf+0.1,Zr,false); box(world,M.valve,0.32,0.04,0.04,X0,yf+0.22,Zr,false);
+  pipe(world,P(X0,yf,Zr),P(X0,0.22,Zr),0.055); pipe(world,P(X0,0.22,Zr),P(X0,0.22,Zr+0.95),0.055); pipe(world,P(X0,0.22,Zr+0.95),P(xP,0.22,Zr+0.95),0.055); pipe(world,P(xP,0.22,Zr+0.95),P(xP,0.22,Zr+0.55),0.055);
+  box(world,M.concrete,0.9,0.1,0.7,xP,0.05,Zr,false); box(world,M.drain,0.62,0.03,0.42,xP,0.105,Zr,false); [-0.15,0,0.15].forEach(function(dz){box(world,M.pipeG,0.62,0.02,0.025,xP,0.125,Zr+dz,false);});
   // separador de primeras lluvias
-  var sep=cyl(world,M.sep,0.28,0.28,1.0,12.5,0.15+0.5,rz); G.sep=sep;
-  pipe(world,P(11.8,yf,rz),P(12.22,yf,rz),0.055);
-  pipe(world,P(12.5,1.15,rz),P(12.5,1.5,rz),0.055); pipe(world,P(12.5,1.5,rz),P(13.7,1.5,rz),0.055); pipe(world,P(13.7,1.5,rz),P(13.7,1.42,rz),0.055);
+  var sep=cyl(world,M.sep,0.28,0.28,1.0,XX(0.7),0.15+0.5,Zr); G.sep=sep;
+  pipe(world,P(X0,yf,Zr),Rw(12.22,yf),0.055);
+  pipe(world,Rw(12.5,1.15),Rw(12.5,1.5),0.055); pipe(world,Rw(12.5,1.5),Rw(13.7,1.5),0.055); pipe(world,Rw(13.7,1.5),Rw(13.7,1.42),0.055);
   // filtro previo (grava, arena, carbón)
-  cyl(world,M.carbon,0.34,0.34,0.4,13.7,0.4,rz,false); cyl(world,M.arena,0.34,0.34,0.4,13.7,0.8,rz,false); cyl(world,M.grava,0.34,0.34,0.4,13.7,1.2,rz,false);
-  var fsh=cyl(world,M.filt,0.37,0.37,1.3,13.7,0.8,rz,false); G.filt=fsh;
-  pipe(world,P(13.7,yf,rz),P(t1x-T.r,yf,rz),0.055);
+  cyl(world,M.carbon,0.34,0.34,0.4,XX(1.9),0.4,Zr,false); cyl(world,M.arena,0.34,0.34,0.4,XX(1.9),0.8,Zr,false); cyl(world,M.grava,0.34,0.34,0.4,XX(1.9),1.2,Zr,false);
+  var fsh=cyl(world,M.filt,0.37,0.37,1.3,XX(1.9),0.8,Zr,false); G.filt=fsh;
+  pipe(world,Rw(13.7,yf),P(XX(s1-T.r),yf,Zr),0.055);
   // tinacos
   tankWaters=[];
-  for(var ti=0;ti<nT;ti++){var tx=t1x+ti*tgap;
-    box(world,M.pretil,T.r*2+0.2,0.04,T.r*2+0.2,tx,0.17,rz,false);
-    var shell=cyl(world,M.tank,T.r,T.r,T.h,tx,0.19+T.h/2,rz,false); if(ti===0)G.tank=shell;
-    cyl(world,M.lid,T.r*0.98,T.r*0.98,0.07,tx,0.19+T.h+0.035,rz); cyl(world,M.lid,0.12,0.12,0.06,tx,0.19+T.h+0.1,rz);
-    var tw=new THREE.Mesh(new THREE.CylinderGeometry(T.r*0.94,T.r*0.94,1,28),M.water); tw.position.set(tx,0.19,rz); world.add(tw); tankWaters.push(tw);
-    if(ti>0)pipe(world,P(tx-tgap+T.r,yf,rz),P(tx-T.r,yf,rz),0.055);}
-  tankWater=tankWaters[0]; tankInfo={x:t1x,z:rz,r:T.r,h:T.h,y0:0.19,n:nT,cap:capT};
-  // salida a la llave del plantel y toma para el autolavado
-  pipe(world,P(t1x,0.7,rz+T.r),P(t1x,0.7,8.3),0.03); pipe(world,P(t1x,0.7,8.3),P(t1x,0.55,8.3),0.03);
-  pipe(world,P(xL,0.4,rz),P(17.7,0.4,rz),0.04); pipe(world,P(17.7,0.4,rz),P(17.7,1.6,rz),0.04); pipe(world,P(17.7,1.6,rz),P(17.7,1.6,9.3),0.04); pipe(world,P(17.7,1.6,9.3),P(20.3,1.6,9.3),0.04); pipe(world,P(20.3,1.6,9.3),P(20.3,1.0,9.3),0.04);
-  box(world,M.blueT,0.1,1.0,0.1,20.3,0.5,9.3,false); var asg=new THREE.Mesh(new THREE.PlaneGeometry(1.1,0.28),M.autoSign); asg.position.set(20.3,1.28,9.38); world.add(asg);
+  for(var ti=0;ti<nT;ti++){var tx=XX(s1+ti*tgap);
+    box(world,M.pretil,T.r*2+0.2,0.04,T.r*2+0.2,tx,0.17,Zr,false);
+    var shell=cyl(world,M.tank,T.r,T.r,T.h,tx,0.19+T.h/2,Zr,false); if(ti===0)G.tank=shell;
+    cyl(world,M.lid,T.r*0.98,T.r*0.98,0.07,tx,0.19+T.h+0.035,Zr); cyl(world,M.lid,0.12,0.12,0.06,tx,0.19+T.h+0.1,Zr);
+    var tw=new THREE.Mesh(new THREE.CylinderGeometry(T.r*0.94,T.r*0.94,1,28),M.water); tw.position.set(tx,0.19,Zr); world.add(tw); tankWaters.push(tw);
+    if(ti>0)pipe(world,P(XX(s1+(ti-1)*tgap+T.r),yf,Zr),P(XX(s1+ti*tgap-T.r),yf,Zr),0.055);}
+  tankWater=tankWaters[0]; tankInfo={x:xU,z:Zr,r:T.r,h:T.h,y0:0.19,n:nT,cap:capT};
+  // llave del plantel (junto a la malla) y toma para el autolavado (en un poste del lado de los autos)
+  pipe(world,P(xU,0.7,Zr-T.r),P(xU,0.7,3.3),0.03); box(world,M.valve,0.1,0.08,0.12,xU,0.62,3.24,false);
+  pipe(world,P(xA,0.4,Zr+T.r),P(xA,0.4,6.6),0.04); pipe(world,P(xA,0.4,6.6),P(xA,1.0,6.6),0.04);
+  box(world,M.blueT,0.1,1.0,0.1,xA,0.5,6.7,false); var asg=new THREE.Mesh(new THREE.PlaneGeometry(1.1,0.28),M.autoSign); asg.position.set(xA,1.28,6.76); world.add(asg);
 
   // trayectorias de flujo
   var Qb=function(){return F.Qb}, Qc=function(){return F.Qc};
   for(var i=0;i<6;i++){var x=-11.5+i*4.4; addPath('rb',[P(x,rb+0.08,-4.6),P(x,rb+0.08,5.6),P(x,cy,zcB)],Qb,0.7);}
   for(var j=0;j<3;j++){var z=-3.6+j*3.6; addPath('rc',[P(13.0,rc+0.08,z),P(18.0,rc+0.08,z),P(xcC,cyc,z)],Qc,0.7);}
   addPath('canB',[P(-13.8,cy,zcB),P(bxB,cy,zcB)],Qb,0.7);
-  addPath('bajB',[P(bxB,cy,bzB),P(bxB,yf,bzB),P(bxB,yf,rz),P(11.8,yf,rz)],Qb,0.8);
   addPath('canC',[P(xcC,cyc,-5.5),P(xcC,cyc,bzC)],Qc,0.7);
-  addPath('bajC',[P(bxC,cyc,bzC),P(bxC,yC,bzC),P(bxC,yC,7.55),P(11.4,yC,7.55),P(11.4,yf,rz)],Qc,0.8);
+  addPath('bajB',[P(bxB,cy,bzB),P(bxB,yT,bzB),P(bxB,yT,5.85),P(bxC,yT,5.85),P(bxC,yT,bzC)],Qb,0.8);
+  addPath('bajC',[P(bxC,cyc,bzC),P(bxC,yT,bzC)],Qc,0.6);
+  addPath('aereo',[P(bxC,yT,bzC),P(bxC,yT,zF),P(xd,yT,zF),P(xd,yf,zF),P(xd,yf,Zr),P(X0,yf,Zr)],function(){return F.Q},0.7);
   var Fq=function(){return F.over?0:F.Q};
-  addPath('trunk',[P(11.8,yf,rz),P(12.5,yf,rz),P(12.5,1.5,rz),P(13.7,1.5,rz),P(13.7,yf,rz),P(t1x-T.r,yf,rz)],Fq,0.5);
-  if(nT>1)addPath('link',[P(t1x+T.r,yf,rz),P(t1x+tgap-T.r,yf,rz)],function(){return(S.vol>=capT-1e-6&&!F.over)?F.Q:0},0.3);
-  addPath('desvio',[P(11.8,0.22,rz),P(11.8,0.22,8.7),P(17.3,0.22,8.7)],function(){return F.over?F.Q:0},0.5);
-  addPath('uso',[P(t1x,0.7,rz+T.r),P(t1x,0.7,8.3),P(t1x,0.55,8.3)],function(){return F.use?USE_RATE:0},0.3);
-  addPath('auto',[P(xL,0.4,rz),P(17.7,0.4,rz),P(17.7,1.6,rz),P(17.7,1.6,9.3),P(20.3,1.6,9.3),P(20.3,1.0,9.3)],function(){return F.use?USE_RATE:0},0.5);
+  addPath('trunk',[P(X0,yf,Zr),Rw(12.5,yf),Rw(12.5,1.5),Rw(13.7,1.5),Rw(13.7,yf),P(XX(s1-T.r),yf,Zr)],Fq,0.5);
+  if(nT>1)addPath('link',[P(XX(s1+T.r),yf,Zr),P(XX(s1+tgap-T.r),yf,Zr)],function(){return(S.vol>=capT-1e-6&&!F.over)?F.Q:0},0.3);
+  addPath('desvio',[P(X0,0.22,Zr),P(X0,0.22,Zr+0.95),P(xP,0.22,Zr+0.95),P(xP,0.22,Zr+0.55)],function(){return F.over?F.Q:0},0.5);
+  addPath('uso',[P(xU,0.7,Zr-T.r),P(xU,0.7,3.3)],function(){return F.use?USE_RATE:0},0.3);
+  addPath('auto',[P(xA,0.4,Zr+T.r),P(xA,0.4,6.6),P(xA,1.0,6.6)],function(){return F.use?USE_RATE:0},0.5);
   // instanciado de gotas
   if(dotMesh){scene.remove(dotMesh);}
   dots=[]; paths.forEach(function(p,pi){for(var k=0;k<p.n;k++)dots.push({p:p,k:k,u:k/p.n});});
@@ -1507,15 +1594,17 @@ function build(){
 
   // etiquetas
   labelDefs=[
-    {t:'Edificio de Bachillerato · 293.4 m²',p:P(-1.4,rb+0.6,0),c:'sys'},
-    {t:'Cafetería · 76.7 m²',p:P(14.8,rc+0.6,2.5),c:'sys'}, {t:'Fachada',p:P(-14.4,hb*0.55,-3.2),c:'sys'}, {t:'Bajante existente',p:P(-13.95,hb*0.45,6.0),c:'sys'}, {t:'Bajante existente',p:P(10.5,hb*0.62,6.1),c:'dim'}, {t:'Techo de lámina',p:P(14.8,rc+1.2,0),c:'sys'}, {t:'Calle (por confirmar)',p:P(-21,0.5,0),c:'dim'},
-    {t:'25.6 m',p:P(-1.4,rb+0.2,-5.9),c:'dim'}, {t:'11.5 m',p:P(-14.6,rb+0.2,0),c:'dim'},
-    {t:'11.4 m',p:P(18.9,rc+0.15,-3.2),c:'dim'}, {t:'6.8 m',p:P(14.8,rc+0.2,-5.9),c:'dim'},
+    {t:'Edificio de Bachillerato · 293.4 m²',p:P(-1.4,rb+0.6,0),c:'sys',far:1},
+    {t:'Cafetería · 76.7 m²',p:P(14.8,rc+0.6,2.5),c:'sys',far:1}, {t:'Fachada',p:P(-14.4,hb*0.55,-3.2),c:'sys'}, {t:'Bajante existente',p:P(-13.95,hb*0.45,6.0),c:'sys'}, {t:'Bajante existente',p:P(-2.75,hb*0.62,6.1),c:'dim'}, {t:'Tinaco existente (azotea)',p:P(8.5,rb+1.7,-2.2),c:'dim'}, {t:'Techo de lámina',p:P(14.8,rc+1.2,0),c:'sys',far:1}, {t:'Calle (por confirmar)',p:P(-21,0.5,0),c:'dim'},
+    {t:'25.6 m',p:P(-1.4,dyb+0.12,-5.95),c:'dim',far:1}, {t:'11.5 m',p:P(-14.45,dyb+0.12,0),c:'dim',far:1},
+    {t:'11.4 m',p:P(18.45,dyc+0.12,0),c:'dim',far:1}, {t:'6.8 m',p:P(14.8,dyc+0.12,-5.95),c:'dim',far:1}, {t:'Base de concreto 6.45 × 2.3 m',p:P(X0+(s0b+s9b)/2,0.35,Zr+1.5),c:'dim',far:1}, {t:'Registro 0.9 × 0.7 m',p:P(xP,0.3,Zr),c:'dim',far:1},
     {t:'Canaleta 25.6 m con malla',p:P(-6.5,cy,6.2),c:'sys'}, {t:'Canaleta 11.4 m con malla',p:P(19,cyc,2),c:'sys'},
-    {t:'Bajada',p:P(bxB,hb*0.5,6.1),c:'sys'}, {t:'Bajada',p:P(bxC,hc*0.5,5.6),c:'sys'},
-    {t:'Separador ≈ 246 L',p:P(12.5,1.9,rz),c:'sys'}, {t:'Filtro previo',p:P(13.7,1.9,rz),c:'sys'}, {t:'Válvula de desvío',p:P(11.8,0.85,rz),c:'sys'},
-    {t:'tank',p:P(t1x+(nT-1)*tgap/2,0.19+T.h+0.7,rz),c:'sys'},
-    {t:'Pozo de absorción (rebose)',p:P(17.9,0.6,8.7),c:'sys'}, {t:'Autolavado (por acordar)',p:P(20.3,1.8,9.3),c:'sys'}, {t:'Llave',p:P(t1x,0.95,8.3),c:'sys'}, {t:'Cancha con malla',p:P(26.5,4.9,-1),c:'sys'}, {t:'Estacionamiento (esquema)',p:P(-4,2.4,10),c:'dim'}
+    {t:'Canastilla de malla',p:P(bxB,cy-0.25,zcB),c:'sys'}, {t:'Canastilla de malla',p:P(bxC,cyc-0.25,bzC),c:'sys'},
+    {t:'Tubería pegada al muro y a la malla',p:P(15.5,yT+0.25,5.9),c:'sys'},
+    {t:'Válvula de desvío',p:P(X0,0.85,Zr),c:'sys'}, {t:'Separador ≈ 246 L',p:P(XX(0.7),1.9,Zr),c:'sys'}, {t:'Filtro previo',p:P(XX(1.9),2.0,Zr),c:'sys'},
+    {t:'tank',p:P(XX(s1+(nT-1)*tgap/2),0.19+T.h+0.7,Zr),c:'sys'},
+    {t:'Registro de desagüe (rebose)',p:P(xP,0.6,Zr),c:'sys',far:1}, {t:'Toma autolavado (por acordar)',p:P(xA,1.9,6.7),c:'sys'}, {t:'Llave del plantel',p:P(xU,0.95,3.25),c:'sys'},
+    {t:'Paso libre a la cancha',p:P(21.2,0.4,5.4),c:'sys'}, {t:'Tubería existente (azul)',p:P(6,0.45,5.9),c:'dim'}, {t:'Cancha con malla',p:P(26.5,5.3,-1),c:'sys',far:1}, {t:'Estacionamiento (esquema)',p:P(-4,2.4,10.5),c:'dim',far:1}
   ];
   mkLabels();
 }
@@ -1528,6 +1617,7 @@ var tmp=new V3();
 function updLabels(){var w=stage.clientWidth,h=stage.clientHeight;
   for(var i=0;i<labEls.length;i++){var e=labEls[i],d=labelDefs[i]; if(!S.labels){e.style.display='none';continue;}
     if(cam.position.x<-22&&!/Fachada|Calle|Bajante/.test(d.t)){e.style.display='none';continue;}
+    if(!d.far&&cam.position.distanceTo(d.p)>34){e.style.display='none';continue;}
     tmp.copy(d.p).project(cam); var vis=tmp.z<1&&Math.abs(tmp.x)<1.05&&Math.abs(tmp.y)<1.05;
     if(!vis){e.style.display='none';continue;} e.style.display='block';
     e.style.transform='translate('+((tmp.x*0.5+0.5)*w).toFixed(1)+'px,'+((-tmp.y*0.5+0.5)*h).toFixed(1)+'px) translate(-50%,-120%)';
@@ -1546,15 +1636,15 @@ function reset(){S.rainMM=0;S.cap=0;S.vol=0;S.over=0;S.used=0;S.tSim=0;S.wet=0;f
 
 /* ---------- UI ---------- */
 var STEPS=[
- {t:'La lluvia cae sobre los techos',x:'Entre 500 y 553 mm de lluvia al año caen sobre 370.1 m² de techo. Hoy esa agua se va al drenaje.',cam:[44,27,46],look:[10,3,2],hi:[]},
+ {t:'La lluvia cae sobre los techos',x:'Entre 500 y 553 mm de lluvia al año caen sobre 370.1 m² de techo. Hoy esa agua se va al drenaje.',cam:[38,26,30],look:[14,1,0],hi:[]},
  {t:'Los techos son la superficie de captación',x:'Las losas tienen una pendiente suave de desagüe que lleva el agua hacia la orilla donde está la canaleta.',cam:[-4,30,22],look:[1,6,0],hi:['roof']},
- {t:'Las canaletas recogen el agua',x:'25.6 m de canaleta en el Bachillerato y 11.4 m en la Cafetería, en las orillas bajas de cada techo. Una malla las cubre para detener hojas y basura.',cam:[0,13,26],look:[2,5.5,5.9],hi:['canal','mesh']},
- {t:'Las bajadas la llevan por gravedad',x:'Tubos de PVC que bajan el agua desde las canaletas hasta las tuberías que van al tinaco.',cam:[23,6,15],look:[14.8,2,6.8],hi:['pipe']},
- {t:'Separador y filtro previo dejan el agua limpia',x:'Antes de los tinacos, el separador desecha las primeras aguas, que traen polvo, y el filtro de grava, arena y carbón retiene sedimentos. Con la válvula de desvío se puede mandar el agua al pozo cuando no conviene almacenarla.',cam:[16,3.4,14],look:[13,0.9,6.7],hi:['sep','filt']},
- {t:'Dos tinacos guardan el agua',x:'Dos tinacos de 1,100 L conectados en serie, sobre una base de concreto junto a la Cafetería. Cuando se llenan, el excedente se desvía a un pozo de absorción.',cam:[21,4.2,14.5],look:[15.8,0.7,7],hi:['tank']},
- {t:'Usos: limpieza, riego y autolavado',x:'La llave surte la limpieza del plantel y una toma lleva agua al autolavado del estacionamiento vecino, si se logra un acuerdo. No es agua para beber.',cam:[25,5,16],look:[18,0.9,8.3],hi:['tank']}
+ {t:'Las canaletas llevan malla para filtrar hojas',x:'25.6 m de canaleta en el Bachillerato y 11.4 m en la Cafetería, en las orillas bajas de cada techo. La malla naranja cubre cada canaleta y una canastilla de malla protege la entrada de cada bajada.',cam:[0,13,26],look:[2,5.5,5.9],hi:['canal','mesh']},
+ {t:'Las bajadas van pegadas al muro y no estorban',x:'La bajada del Bachillerato y la de la Cafetería se juntan en la esquina de la Cafetería. De ahí una sola tubería corre a 2.7 m de altura, pegada a la pared y luego a la malla de la cancha, hasta la base de los tinacos. El pasillo y la puerta de la cancha quedan libres.',cam:[22,7.5,16],look:[18,2.4,4],hi:['pipe']},
+ {t:'Separador y filtro previo dejan el agua limpia',x:'Antes de los tinacos, el separador desecha las primeras aguas, que traen polvo, y el filtro de grava, arena y carbón retiene sedimentos. Con la válvula de desvío se puede mandar el agua al registro cuando no conviene almacenarla.',cam:[24.5,4.2,11],look:[26.2,0.9,4.3],hi:['sep','filt','mesh']},
+ {t:'Dos tinacos guardan el agua',x:'Dos tinacos de 1,100 L conectados en serie, sobre una base de concreto del lado del estacionamiento, pegada a la malla sur de la cancha. Quedan fuera del pasillo y del acceso a la cancha. Cuando se llenan, el excedente se desvía al registro de desagüe.',cam:[28,4.8,11],look:[27.5,0.7,4.3],hi:['tank']},
+ {t:'Usos: limpieza, riego y autolavado',x:'La llave junto a la malla surte la limpieza del plantel y una toma en un poste lleva agua al autolavado del estacionamiento vecino, si se logra un acuerdo. No es agua para beber.',cam:[27,4.5,12],look:[28.5,1.0,5.5],hi:['tank']}
 ];
-var HI={mesh:[M.mesh],roof:[M.roof,M.lam],canal:[M.canal,M.canalW],pipe:[M.pipe],sep:[M.sep],filt:[M.filt],tank:[M.tank,M.water],grass:[M.grass]};
+var HI={mesh:[M.mesh,M.basket],roof:[M.roof,M.lam],canal:[M.canal,M.canalW],pipe:[M.pipe],sep:[M.sep],filt:[M.filt],tank:[M.tank,M.water],grass:[M.grass]};
 function setStep(n){S.step=n; var st=STEPS[n];
   $('capT').textContent=(n+1)+'. '+st.t; $('capX').textContent=st.x; $('capS').textContent='Paso '+(n+1)+' de '+STEPS.length;
   [].forEach.call($('steps').children,function(li,i){li.firstChild.classList.toggle('on',i===n);});
@@ -1573,7 +1663,7 @@ function updUI(force){$('oRain').textContent=fmt(S.rainMM,1);$('oCap').textConte
 /* cámara */
 var tw=null;
 function goTo(p,l,ms){tw={p0:cam.position.clone(),t0:ctl.target.clone(),p1:new V3(p[0],p[1],p[2]),t1:new V3(l[0],l[1],l[2]),t:0,d:ms||1000};}
-var VIEWS={gen:[[44,27,46],[10,3,2]],top:[[2,62,5.3],[2,0,5]],sys:[[22,6,17],[15,0.8,7.5]],fac:[[-31,3.6,7],[-14.2,3.2,0.8]],lat:[[-7,6.5,20.5],[-2,3.2,5.75]],caf:[[26,9,14],[14.8,3,0]]};
+var VIEWS={gen:[[38,26,30],[14,1,0]],top:[[14,70,5.5],[14,0,3]],sys:[[27,7.5,15.5],[27,0.8,4.2]],fac:[[-31,3.6,7],[-14.2,3.2,0.8]],lat:[[-7,6.5,20.5],[-2,3.2,5.75]],caf:[[26,9,14],[14.8,3,0]],pas:[[14,12,20],[16,0,5]]};
 
 /* ---------- bucle ---------- */
 var clock=new THREE.Clock(), dm=new THREE.Object3D();
@@ -1657,7 +1747,7 @@ $('dY2').textContent=fmt((D.Ab+D.Ac)*526.7*D.C/1000,1)+' m³ ≈ '+fmt(Math.roun
 
 /* arranque */
 build(); setRain(40); clearStep(); resize(); runYear();
-cam.position.set(44,27,46); ctl.target.set(10,3,2); ctl.update(); flows(); updUI(true);
+cam.position.set(38,26,30); ctl.target.set(14,1,0); ctl.update(); flows(); updUI(true);
 window.__maq={yearSim:yearSim,runYear:runYear,S:S,F:F,D:D,advance:function(sec){var left=sec,st=Math.min(1,sec/200);while(left>0){var d=Math.min(st,left);simStep(d);left-=d;}updUI(true);},reset:reset,setRain:setRain,setStep:setStep,build:build,flows:flows,cam:cam,ctl:ctl,tank:function(){return tankInfo}};
 frame();
 })();
