@@ -143,7 +143,7 @@ select{background:var(--surface);border:1px solid var(--line);border-radius:6px;
     <div class="card">
       <h2>Simular un año</h2>
       <div class="row" style="justify-content:space-between"><label for="ySc">Lluvia del año</label>
-        <select id="ySc"><option value="316">Año seco 2004 · 316 mm</option><option value="527">Promedio estación SMN · 527 mm</option><option value="553" selected>Valor del proyecto · 553 mm</option><option value="757">Año lluvioso 2021 · 757 mm</option></select></div>
+        <select id="ySc"><option value="207">Año seco 2022 · 207 mm</option><option value="516">Promedio estación SMN · 516 mm</option><option value="553" selected>Valor del proyecto · 553 mm</option><option value="757">Año lluvioso 2021 · 757 mm</option></select></div>
       <div class="row" style="justify-content:space-between;margin-top:8px"><label for="yUse">Consumo diario</label><span class="read" style="font-size:16px"><span id="yUseV">100</span> <small>L/día</small></span></div>
       <input id="yUse" type="range" min="0" max="500" step="10" value="100" aria-label="Consumo diario de riego y limpieza en litros por día">
       <div class="row" style="margin-top:8px"><button class="btn" id="yRun" type="button">Simular año completo</button></div>
@@ -155,7 +155,7 @@ select{background:var(--surface);border:1px solid var(--line);border-radius:6px;
       </div>
       <div class="ybars" id="yBars" aria-label="Lluvia por mes"></div>
       <div class="ymon"><span>E</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span></div>
-      <div class="note">Los litros captados salen de V = Área × Lluvia × C (C = 0.8). La lluvia se reparte en los meses con el promedio de la estación SMN 13041. El reparto por días es un ejemplo con semilla fija, y el consumo diario no es un dato medido: falta el dato de intendencia.</div>
+      <div class="note">Los litros captados salen de V = Área × Lluvia × C (C = 0.8). La lluvia se reparte en los meses con el promedio mensual 2004–2025 de la estación SMN 13041. El reparto por días es un ejemplo con semilla fija, y el consumo diario no es un dato medido: falta el dato de intendencia.</div>
     </div>
     <div class="card">
       <h2>Recorrido del agua</h2>
@@ -190,7 +190,7 @@ select{background:var(--surface);border:1px solid var(--line);border-radius:6px;
         <tr><td>Cafetería</td><td id="dAc"></td></tr>
         <tr><th>Superficie de captación</th><th id="dAt"></th></tr>
         <tr><td>Lluvia anual del proyecto</td><td>553 mm</td></tr>
-        <tr><td>Estación SMN 13041 (2004–2021)</td><td>527 mm</td></tr>
+        <tr><td>Estación SMN 13041 (2004–2025)</td><td>516 mm</td></tr>
         <tr><td>Rango municipal (INEGI)</td><td>500–900 mm</td></tr>
         <tr><td>Coeficiente de escurrimiento</td><td>C = 0.8</td></tr>
         <tr><th>Captable al año</th><th id="dY"></th></tr>
@@ -1647,7 +1647,7 @@ function reset(){S.rainMM=0;S.cap=0;S.vol=0;S.over=0;S.used=0;S.tSim=0;S.wet=0;f
 
 /* ---------- UI ---------- */
 var STEPS=[
- {t:'La lluvia cae sobre los techos',x:'Entre 527 y 553 mm de lluvia al año caen sobre 370.1 m² de techo. Hoy esa agua se va al drenaje.',cam:[38,26,30],look:[14,1,0],hi:[]},
+ {t:'La lluvia cae sobre los techos',x:'Entre 516 y 553 mm de lluvia al año caen sobre 370.1 m² de techo. Hoy esa agua se va al drenaje.',cam:[38,26,30],look:[14,1,0],hi:[]},
  {t:'Los techos son la superficie de captación',x:'El agua de cada losa escurre hacia la orilla donde está la canaleta. La pendiente real de las losas está por medir; en la maqueta las losas se dibujan planas.',cam:[-4,30,22],look:[1,6,0],hi:['roof']},
  {t:'Las canaletas llevan malla para filtrar hojas',x:'25.6 m de canaleta en el Bachillerato y 11.4 m en la Cafetería, en las orillas bajas de cada techo. La malla naranja cubre cada canaleta y una canastilla de malla protege la entrada de cada bajada. Las canaletas se dibujan con 2 % de pendiente hacia su bajada, el mínimo que pide CONAGUA (2016): caen 0.51 m en el Bachillerato y 0.23 m en la Cafetería.',cam:[0,13,26],look:[2,5.5,5.9],hi:['canal','mesh']},
  {t:'Las bajadas van pegadas al muro y no estorban',x:'La bajada del Bachillerato y la de la Cafetería se juntan en la esquina de la Cafetería. De ahí una sola tubería corre a 2.7 m de altura, pegada a la pared y luego a la malla de la cancha, hasta la base de los tinacos. El pasillo y la puerta de la cancha quedan libres.',cam:[22,7.5,16],look:[18,2.4,4],hi:['pipe']},
@@ -1733,7 +1733,7 @@ ctl.addEventListener('start',function(){tw=null;});
 
 
 /* ---------- simulación de un año ---------- */
-var MON=[3.6,5.5,8.6,11.4,15.4,33.3,29.1,31.6,39.0,22.1,8.0,3.8], MSUM=MON.reduce(function(s,v){return s+v},0), DIM=[31,28,31,30,31,30,31,31,30,31,30,31], PDAY=[.08,.10,.12,.20,.30,.55,.60,.60,.65,.45,.15,.08];
+var MON=[8.6,12.1,18.5,26.4,33.9,85.7,70.8,80.9,95.6,57.0,19.8,6.9], MSUM=MON.reduce(function(s,v){return s+v},0), DIM=[31,28,31,30,31,30,31,31,30,31,30,31], PDAY=[.08,.10,.12,.20,.30,.55,.60,.60,.65,.45,.15,.08];
 function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
 function yearSim(P,use,cap){var r=rng(20260101),A=D.Ab+D.Ac,tank=0,res={P:P,cap:0,used:0,over:0,dry:0,month:[]};
   for(var m=0;m<12;m++){var tot=P*MON[m]/MSUM,days=DIM[m],rainy=[],w=0;
@@ -1754,7 +1754,7 @@ $('yUse').oninput=function(){$('yUseV').textContent=this.value};$('yRun').onclic
 var yb=D.Ab*D.P/1000*D.C, yc=D.Ac*D.P/1000*D.C;
 $('dAb').textContent=fmt(D.Ab,1)+' m²'; $('dAc').textContent=fmt(D.Ac,1)+' m²'; $('dAt').textContent=fmt(D.Ab+D.Ac,1)+' m²';
 $('dY').textContent=fmt(yb+yc,1)+' m³ ≈ '+fmt(Math.round((yb+yc)*10)*100)+' L';
-$('dY2').textContent=fmt((D.Ab+D.Ac)*526.7*D.C/1000,1)+' m³ ≈ '+fmt(Math.round((D.Ab+D.Ac)*526.7*D.C/100)*100)+' L';
+$('dY2').textContent=fmt((D.Ab+D.Ac)*516.2*D.C/1000,1)+' m³ ≈ '+fmt(Math.round((D.Ab+D.Ac)*516.2*D.C/100)*100)+' L';
 
 /* arranque */
 build(); setRain(40); clearStep(); resize(); runYear();
