@@ -179,7 +179,7 @@ select{background:var(--surface);border:1px solid var(--line);border-radius:6px;
         <button class="btn" data-view="pas" type="button">Paso a la cancha</button>
         <button class="btn on" id="lab" type="button">Etiquetas</button>
       </div>
-      <div class="warn">La fachada del Bachillerato se modeló con fotografías de Google Maps. El muro largo (lado del estacionamiento), el pasillo hacia la cancha, la cancha y el techo de lámina de la Cafetería se modelaron con fotografías tomadas en el plantel. Los dos tinacos, su base de concreto, la válvula de desvío, el registro del plantel, las mallas y la toma para el autolavado son una propuesta: no existen en el plantel. Las medidas de la cancha, los autos y los árboles son estimadas, y las alturas son de 3 m por nivel.</div>
+      <div class="warn">La fachada del Bachillerato se modeló con fotografías de Google Maps. El muro largo (lado del estacionamiento), el pasillo hacia la cancha, la cancha y el techo de lámina de la Cafetería se modelaron con fotografías tomadas en el plantel. Los dos tinacos, su base de concreto, la válvula de desvío, el registro del plantel, las mallas y la toma para el autolavado son una propuesta: no existen en el plantel. El estacionamiento se completó con los videos del plantel (camionetas, taxis, puestos, caseta de block, tinacos del vecino, cobertizo de lámina y edificio naranja del fondo); la posición de cada elemento es aproximada. Las medidas de la cancha, los autos y los árboles son estimadas, y las alturas son de 3 m por nivel.</div>
     </div>
     <div class="card">
       <h2>Datos del proyecto</h2>
@@ -1289,7 +1289,7 @@ var fill=new THREE.DirectionalLight(0xffffff,0.25); fill.position.set(-30,18,8);
 
 function mat(c,o){o=o||{};return new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:0.85,metalness:0.02},o));}
 var M={
-  ground:mat(0x8f8e86,{roughness:1}), patio:mat(0xb0b2ad,{roughness:1}), gravel:mat(0xa39d92,{roughness:1}), grass:mat(0x5e9b4c,{roughness:1}), shrub:mat(0x3f7d3a,{roughness:1}),
+  ground:mat(0x8f8e86,{roughness:1}), patio:mat(0xb0b2ad,{roughness:1}), gravel:mat(0x7f8283,{roughness:1}), grass:mat(0x5e9b4c,{roughness:1}), shrub:mat(0x3f7d3a,{roughness:1}),
   wallB:mat(0xe9e6dc), wallC:mat(0xdcb98f), roof:mat(0x8b9094,{roughness:0.95}), pretil:mat(0xcfccc2),
   glass:mat(0x24485c,{roughness:0.25,metalness:0.3}), canal:mat(0x9aa4ab,{roughness:0.5,metalness:0.6}), pipe:mat(0xf1f3f2,{roughness:0.5}),
   sep:mat(0xe6a53a,{roughness:0.5,transparent:true,opacity:0.55}), filt:mat(0xd8e4ea,{roughness:0.2,transparent:true,opacity:0.35}),
@@ -1298,7 +1298,7 @@ var M={
   water:mat(0x2aa3df,{roughness:0.15,transparent:true,opacity:0.88}), drain:mat(0x222b30,{roughness:0.8}), canalW:mat(0x2aa3df,{roughness:0.15,transparent:true,opacity:0.9}),
   dot:new THREE.MeshBasicMaterial({color:0x35b4ee})
 };
-M.navy=mat(0x1f2b6b,{roughness:0.7}); M.fbar=mat(0xf3f3ef,{roughness:0.6}); M.gate=mat(0x17181b,{roughness:0.55}); M.gbar=mat(0x4a4c52,{roughness:0.5});
+M.blueW=mat(0x1b3aa6,{roughness:0.75,emissive:0x0a1a55}); M.orgW=mat(0xe8832b,{roughness:0.75,emissive:0x7a3d0a}); M.whiteW=mat(0xf2f2ee,{roughness:0.9,emissive:0x5a5a58}); M.fbarF=mat(0xf3f3ef,{roughness:0.6,emissive:0x77776f}); M.navy=mat(0x1f2b6b,{roughness:0.7}); M.fbar=mat(0xf3f3ef,{roughness:0.6}); M.gate=mat(0x17181b,{roughness:0.55}); M.gbar=mat(0x4a4c52,{roughness:0.5});
 M.wglass=mat(0x2b3442,{roughness:0.3,metalness:0.2}); M.louv=mat(0xc9ccca,{roughness:0.8}); M.slat=mat(0x70746f,{roughness:0.8}); M.pipeG=mat(0x9a9a98,{roughness:0.7});
 M.dimM=mat(0xd98e04,{roughness:0.6}); M.walk=mat(0xc2bfb6,{roughness:1}); M.road=mat(0x45484d,{roughness:1}); M.curb=mat(0xd8d5cc,{roughness:1}); M.wframe=mat(0xf0efe9,{roughness:0.8});
 M.wallB.color.setHex(0xefece2); M.wallC.color.setHex(0xe9e7df);
@@ -1330,9 +1330,9 @@ M.bill=new THREE.MeshBasicMaterial({map:billTex});
 var autoTex=textTex(512,128,function(x,w,h){x.fillStyle='#f2c230';x.fillRect(0,0,w,h);x.fillStyle='#1b2a33';x.font='700 52px Arial,sans-serif';x.textBaseline='middle';x.fillText('AUTOLAVADO',22,50);x.font='500 30px Arial,sans-serif';x.fillText('(por acordar)',22,100);});
 M.autoSign=new THREE.MeshBasicMaterial({map:autoTex});
 function textTex(w,h,draw){var c=document.createElement('canvas');c.width=w;c.height=h;var x=c.getContext('2d');draw(x,w,h);var t=new THREE.CanvasTexture(c);t.anisotropy=4;return t;}
-var signTex=textTex(1024,256,function(x,w,h){x.fillStyle='#1f2b6b';x.fillRect(0,0,w,h);x.textBaseline='middle';x.strokeStyle='#f4f4f0';x.lineWidth=6;for(var pk=0;pk<12;pk++){x.save();x.translate(110,128);x.rotate(pk*Math.PI/6);x.beginPath();x.ellipse(0,-40,15,32,0,0,Math.PI*2);x.stroke();x.restore();}x.beginPath();x.arc(110,128,12,0,Math.PI*2);x.stroke();x.font='italic 600 76px Georgia,serif';x.fillStyle='#e9a3bc';x.fillText('Prepa',205,76);x.font='600 140px Georgia,serif';x.fillStyle='#f4f4f0';x.fillText('ETAC',430,140);});
+var signTex=textTex(1024,256,function(x,w,h){x.textBaseline='middle';x.strokeStyle='#f4f4f0';x.lineWidth=6;for(var pk=0;pk<12;pk++){x.save();x.translate(110,128);x.rotate(pk*Math.PI/6);x.beginPath();x.ellipse(0,-40,15,32,0,0,Math.PI*2);x.stroke();x.restore();}x.beginPath();x.arc(110,128,12,0,Math.PI*2);x.stroke();x.font='italic 600 76px Georgia,serif';x.fillStyle='#f4f4f0';x.fillText('Prepa',205,76);x.font='600 140px Georgia,serif';x.fillStyle='#f4f4f0';x.fillText('ETAC',430,140);});
 var sideTex=textTex(1024,192,function(x,w,h){x.clearRect(0,0,w,h);x.fillStyle='#1f2b6b';x.textBaseline='middle';x.font='500 120px Arial,sans-serif';x.fillText('Bachillerato',20,100);});
-M.sign=new THREE.MeshBasicMaterial({map:signTex}); M.side=new THREE.MeshBasicMaterial({map:sideTex,transparent:true});
+M.sign=new THREE.MeshBasicMaterial({map:signTex,transparent:true}); M.side=new THREE.MeshBasicMaterial({map:sideTex,transparent:true});
 var world=new THREE.Group(); scene.add(world);
 
 /* lluvia */
@@ -1376,19 +1376,30 @@ function gateDoor(x){var z=5.75;box(world,M.brickG,1.7,2.3,0.2,x,1.15,z+0.1,fals
   box(world,M.pretil,1.9,0.12,0.4,x,2.36,z+0.18,false);}
 function bRail(x,w){var z=5.75+0.85;box(world,M.blueT,0.06,0.88,0.06,x-w/2,0.44,z,false);box(world,M.blueT,0.06,0.88,0.06,x+w/2,0.44,z,false);box(world,M.blueT,w+0.06,0.06,0.06,x,0.88,z,false);}
 function bachFacade(nb,hb,rb){
-  // cornisa azul y repisa entre niveles
-  fb(M.navy,11.7,0.26,0.3,0,hb-0.1,0.15);
-  for(var lv=1;lv<nb;lv++)fb(M.navy,11.8,0.18,0.3,0,lv*3,0.15);
-  // letrero
-  if(nb>=2){fb(M.navy,4.5,1.15,0.08,1.1,3.45,0.04);var sp=new THREE.Mesh(new THREE.PlaneGeometry(4.3,1.05),M.sign);sp.rotation.y=-Math.PI/2;sp.position.set(-14.2-0.095,3.45,1.1);world.add(sp);}
-  // ventanas con rejas, niveles superiores
-  for(var l2=1;l2<nb;l2++){[-4.5,-2.7,-0.9,0.9,2.7,4.5].forEach(function(aa){fWin(aa,l2*3+1.5,0.95,1.2,M.fbar,5);});}
-  // planta baja: ventanas con rejas y entrada con arco
-  [-4.35,-2.25,3.45,4.95].forEach(function(aa){fWin(aa,1.75,1.05,1.7,M.gbar,6);});
-  fb(M.navy,0.14,2.1,0.14,0.1,1.05,0.07);fb(M.navy,0.14,2.1,0.14,2.1,1.05,0.07);fb(M.gate,1.8,2.0,0.06,1.1,1.0,0.1);
-  var arc=new THREE.Mesh(new THREE.CircleGeometry(0.9,28,0,Math.PI),M.gate);arc.rotation.y=-Math.PI/2;arc.position.set(-14.2-0.13,2.0,1.1);world.add(arc);
-  var ring=new THREE.Mesh(new THREE.RingGeometry(0.9,1.05,28,1,0,Math.PI),M.navy);ring.rotation.y=-Math.PI/2;ring.position.set(-14.2-0.12,2.0,1.1);world.add(ring);
-  for(var g=0;g<9;g++)fb(M.gbar,0.03,2.6,0.03,0.25+g*0.2,1.3,0.14);
+  // fachada según el video 1 (proporciones medidas en el fotograma; sin escala real, la altura total sigue estimada)
+  var GH=2.6, UH=hb-GH, FW=11.5;
+  fb(M.whiteW,FW,GH,0.05,0,GH/2,0.025);               // planta baja blanca
+  fb(M.blueW,FW,UH,0.06,0,GH+UH/2,0.03);              // muro azul liso de la planta alta
+  fb(M.whiteW,FW+0.2,0.12,0.16,0,GH,0.08);            // repisa blanca entre niveles
+  fb(M.blueW,FW+0.1,0.14,0.14,0,hb+0.03,0.07);        // remate del muro
+  function uz(u){return -FW/2+FW*u;}
+  var org=new THREE.Shape(); [[0.634,0],[1,0],[1,0.878],[0.877,0.149],[0.634,0.149]].forEach(function(p,i){var zz=uz(p[0]),yy=GH+UH*p[1];if(i===0)org.moveTo(zz,yy);else org.lineTo(zz,yy);});
+  var om=new THREE.Mesh(new THREE.ShapeGeometry(org),M.orgW); om.rotation.y=-Math.PI/2; om.position.set(-14.2-0.065,0,0); world.add(om);   // cuña naranja
+  var sp=new THREE.Mesh(new THREE.PlaneGeometry(4.4,1.1),M.sign);sp.rotation.y=-Math.PI/2;sp.position.set(-14.2-0.075,GH+UH*0.2,0.33);world.add(sp);  // logo y nombre en blanco
+  function fWin2(aa,y,w,h,nb2){fb(M.fbarF,w+0.12,h+0.12,0.05,aa,y,0.085);fb(M.wglass,w-0.04,h-0.04,0.03,aa,y,0.11);
+    for(var i=0;i<nb2;i++){var u=aa-w/2+w*(i+0.5)/nb2;fb(M.fbarF,0.03,h,0.03,u,y,0.14);}
+    fb(M.fbarF,w,0.03,0.03,aa,y+h*0.2,0.14);fb(M.fbarF,w,0.03,0.03,aa,y-h*0.2,0.14);}
+  var wy=GH+0.59*GH+0.62;                              // ventanas altas: antepecho a 0.59 de la altura de planta baja sobre la repisa
+  [uz(0.07),uz(0.225),uz(0.41),uz(0.56),uz(0.73),uz(0.905)].forEach(function(aa){fWin2(aa,wy,1.0,1.25,7);});
+  [uz(0.07),uz(0.225),uz(0.73),uz(0.905)].forEach(function(aa){fWin2(aa,1.58,0.94,1.4,7);});
+  // portón con arco (casi al centro): 2.78 m de ancho y 2.13 m de alto, rejas blancas
+  var ac=uz(0.485), AR=1.39, AS=0.74;
+  fb(M.gate,AR*2,AS,0.04,ac,AS/2,0.06);
+  var arc=new THREE.Mesh(new THREE.CircleGeometry(AR,28,0,Math.PI),M.gate);arc.rotation.y=-Math.PI/2;arc.position.set(-14.2-0.1,AS,ac);world.add(arc);
+  var ring=new THREE.Mesh(new THREE.RingGeometry(AR,AR+0.09,28,1,0,Math.PI),M.fbarF);ring.rotation.y=-Math.PI/2;ring.position.set(-14.2-0.105,AS,ac);world.add(ring);
+  fb(M.fbarF,0.09,AS,0.05,ac-AR-0.045,AS/2,0.085);fb(M.fbarF,0.09,AS,0.05,ac+AR+0.045,AS/2,0.085);
+  for(var g=-8;g<=8;g++){var dx=g*0.16;if(Math.abs(dx)>=AR-0.04)continue;var th=AS+Math.sqrt(AR*AR-dx*dx);fb(M.fbarF,0.03,th,0.03,ac+dx,th/2,0.13);}
+  fb(M.fbarF,AR*2,0.04,0.03,ac,0.15,0.13);fb(M.fbarF,AR*2,0.04,0.03,ac,AS,0.13);
   // muro largo del lado del estacionamiento (fotografías propias): pocas ventanas, en el orden real
   // planta baja: 2 ventanas chicas, puerta con reja (nicho de ladrillo), 1 corrediza mediana, 1 corrediza grande y 2 persianas
   sWin(1,-10.6,2.0,0.65,0.7); sWin(1,-9.65,2.0,0.7,0.7);
@@ -1405,9 +1416,20 @@ function bachFacade(nb,hb,rb){
     [1.0,2.05].forEach(function(x){sLouver(x,5.0,0.7,0.85);});
     // bajante rectangular existente: termina a media altura, a la derecha de las ventanas
     box(world,M.pipeC,0.14,hb-3.7,0.1,-2.75,(hb+3.7)/2,5.75+0.12);}
-  // acceso del estacionamiento vecino (Google Maps): reja blanca corrediza y lona sobre la barda
-  var gx=-14.3; box(world,M.afr,0.06,2.0,2.9,gx,1.0,8.1,false); for(var gi=0;gi<10;gi++)box(world,M.afr,0.04,1.9,0.04,gx-0.03,1.0,6.8+gi*0.3,false);
-  box(world,M.pretil,0.1,2.6,6.4,gx,1.3,12.9,false); var pb=new THREE.Mesh(new THREE.PlaneGeometry(6.0,1.5),M.park); pb.rotation.y=-Math.PI/2; pb.position.set(gx-0.07,1.85,12.9); world.add(pb);
+  // acceso al estacionamiento (video 1 y video 2): calzada abierta de unos 3.6 m entre la escuela y el edificio azul vecino (Coflex)
+  (function(){var cx0=-14.2,cx1=-7.6,cz0=9.4,cz1=18.4,H1=3.0,H2=2.9,cm=function(h,o){return mat(h,Object.assign({roughness:0.8},o||{}));};
+    var bl=cm(0x1b3aa6,{emissive:0x0a1a55}),wh=cm(0xf0f0ec,{emissive:0x4a4a48}),gr=cm(0x9a9c98),gl=cm(0x20384a,{roughness:0.3}),rl=cm(0x8d9296,{metalness:0.4});
+    box(world,wh,cx1-cx0,H1,cz1-cz0,(cx0+cx1)/2,H1/2,(cz0+cz1)/2);                  // planta baja blanca
+    box(world,bl,cx1-cx0,H2,cz1-cz0,(cx0+cx1)/2,H1+H2/2,(cz0+cz1)/2);               // planta alta azul
+    box(world,gr,0.05,H1,cz1-cz0,cx1+0.01,H1/2,(cz0+cz1)/2,false);
+    box(world,gr,cx1-cx0,H1-0.2,0.06,(cx0+cx1)/2,(H1-0.2)/2,cz0-0.02,false);        // muro gris del lado del paso
+    box(world,rl,0.05,2.3,2.4,cx0-0.03,1.2,12.0,false);                             // cortina metálica
+    box(world,gl,0.05,1.0,3.0,cx0-0.03,1.6,15.6,false);                             // aparador de vidrio
+    box(world,gl,0.05,0.8,2.6,cx0-0.03,H1+1.6,13.5,false);box(world,gl,0.05,0.8,2.6,cx0-0.03,H1+1.6,16.6,false);   // ventanas altas
+    var st=textTex(1024,256,function(x,w,h){x.fillStyle='#1b3aa6';x.fillRect(0,0,w,h);x.fillStyle='#f4f4f0';x.font='italic 700 120px Georgia,serif';x.textBaseline='middle';x.fillText('coflex',60,128);x.font='600 40px Georgia,serif';x.fillText('innovación en plomería',470,128);});
+    var sp=new THREE.Mesh(new THREE.PlaneGeometry(6.2,1.2),new THREE.MeshBasicMaterial({map:st}));sp.rotation.y=-Math.PI/2;sp.position.set(cx0-0.05,H1+0.5,14.6);world.add(sp);
+    box(world,gr,0.1,0.18,16,cx0-0.04,0.09,14.2,false);
+  })();
   // muro norte (sin fotografiar): ventanas esquemáticas
   for(var l3=0;l3<nb;l3++){var yy=l3*3+1.7;[-10.5,-5.5,-0.5,4.5].forEach(function(x){sWin(-1,x,yy,1.0,1.0);});}
   // bajante existente observada en la esquina
@@ -1447,13 +1469,20 @@ function cancha(cx,cz,cw,cd){var H=5.0,wH=2.6,i,x0=cx-cw/2,x1=cx+cw/2,z0=cz-cd/2
   var bkx=x0+1.0,bkz=z1-1.4;box(world,mat(0x3a3d42,{roughness:0.7}),0.07,1.05,1.8,bkx,3.5,bkz,true);
   var pole=new THREE.Mesh(new THREE.BoxGeometry(0.1,3.4,0.1),M.blueT);pole.position.set(bkx-0.25,1.7,bkz+0.35);pole.rotation.x=-0.22;pole.castShadow=true;world.add(pole);
   box(world,M.blueT,0.1,0.1,0.9,bkx-0.1,3.0,bkz+0.4,false);
+  var lw=new THREE.Mesh(new THREE.PlaneGeometry(cd,2.8),M.link);lw.rotation.y=Math.PI/2;lw.position.set(x0-0.02,1.4,cz);world.add(lw);
+  // porteria azul claro y tablero con dibujo en el extremo oeste, frente a la Cafetería (videos 4 y 5)
+  box(world,M.goalC,0.07,2.1,0.07,x0+0.35,1.05,cz-1.5,false);box(world,M.goalC,0.07,2.1,0.07,x0+0.35,1.05,cz+1.5,false);box(world,M.goalC,0.07,0.07,3.07,x0+0.35,2.1,cz,false);
+  box(world,M.blueT,0.1,3.3,0.1,x0+0.2,1.65,cz,false);box(world,M.blueT,0.6,0.08,0.08,x0+0.5,3.25,cz,false);
+  box(world,mat(0x2a8fd0,{roughness:0.6}),0.05,1.0,1.6,x0+0.8,3.55,cz,false);
+  // porteria azul claro en el extremo este
+  box(world,M.goalC,0.07,2.1,0.07,x1-0.35,1.05,cz-1.5,false);box(world,M.goalC,0.07,2.1,0.07,x1-0.35,1.05,cz+1.5,false);box(world,M.goalC,0.07,0.07,3.07,x1-0.35,2.1,cz,false);
   // vecinos: edificio de ladrillo y anuncio espectacular detrás de la cancha
   box(world,M.brickR,9,6.4,3,cx-3,3.2,z0-5,false);
   box(world,M.gbar,0.25,7.0,0.25,cx+4.5,3.5,z0-3.6,false);box(world,M.gbar,0.25,7.0,0.25,cx+8,3.5,z0-3.6,false);
   var bb=new THREE.Mesh(new THREE.PlaneGeometry(7.4,3.6),M.bill);bb.position.set(cx+6.25,8.6,z0-3.45);world.add(bb);box(world,M.gbar,7.6,3.8,0.15,cx+6.25,8.6,z0-3.65,false);}
-function autos(){var cols=[0xb5322b,0xe9e9e6,0x2e6f9e,0x8e9296,0x1c1d20,0x2b6a8c,0xd9a52b,0xb5322b,0x8e9296,0xe9e9e6];
+function autos(){var cols=[0xa0262e,0xeeeeea,0x2b3448,0xb6b9bb,0x1c1d20,0xb6b9bb,0xeeeeea,0x2c4a3a,0xeeeeea,0xb6b9bb,0xa0262e,0x2b3448,0xe8b82a,0xeeeeea,0xe8b82a,0xa0262e];
   var pos=[[-12,10.5],[-6.2,10.5],[-3.4,10.5],[-0.6,10.5],[2.2,10.5],[-10,15.5],[-7,15.5],[-3,15.5],[22.5,10.8],[25.5,10.4],[28.5,10.4],[31.5,10.4],[34.5,10.4],[27,15.5],[30,15.5],[33,15.5]];
-  pos.forEach(function(q,i){var m=mat(cols[i%cols.length],{roughness:0.4,metalness:0.4});box(world,m,1.8,0.8,4.3,q[0],0.55,q[1],true);box(world,M.carG,1.6,0.6,2.2,q[0],1.2,q[1]-0.2,true);});
+  pos.forEach(function(q,i){if(i===0||i===1||i===2||i===5)return;var m=mat(cols[i%cols.length],{roughness:0.4,metalness:0.4});box(world,m,1.8,0.8,4.3,q[0],0.55,q[1],true);box(world,M.carG,1.6,0.6,2.2,q[0],1.2,q[1]-0.2,true);});
   box(world,mat(0x1d4fa8,{roughness:0.8}),2.3,2.4,4.6,37.2,1.3,6.4,true);
   box(world,mat(0x2f7d3a,{roughness:0.9}),2.6,2.0,2.6,41.5,1.0,5.5,true);var tr=new THREE.Mesh(new THREE.ConeGeometry(2.3,1.0,4),mat(0xd9b432,{roughness:0.9}));tr.rotation.y=Math.PI/4;tr.position.set(41.5,2.5,5.5);tr.castShadow=true;world.add(tr);}
 function techadosParking(){
@@ -1463,6 +1492,46 @@ function techadosParking(){
     [[-2.9,-1.6],[2.9,-1.6],[-2.9,1.6],[2.9,1.6]].forEach(function(o){box(world,post,0.12,3.0,0.12,q[0]+o[0],1.5,q[1]+o[1],false);});});
   var tp=new THREE.Mesh(new THREE.BoxGeometry(3.0,0.05,2.4),tarp);tp.position.set(38.5,2.6,17.5);tp.rotation.z=0.12;world.add(tp);
   box(world,post,0.1,2.6,0.1,37.2,1.3,16.5,false);box(world,post,0.1,2.4,0.1,39.9,1.2,18.6,false);
+}
+
+function estacionamientoVideo(){
+  // Elementos del estacionamiento vistos en el video 2 (recorrido de 60 s, ya con la imagen derecha). Posiciones aproximadas: no hay medidas ni escala.
+  var C=function(h,o){return mat(h,Object.assign({roughness:0.7},o||{}));};
+  var white=C(0xeeeeea), blk=C(0x1b1d20), blue=C(0x1c5fb0), orn=C(0xe8832b), yel=C(0xe8c53a), red=C(0xb3342b), grn=C(0x2f9a4a), blockG=C(0x7d7f7b), beige=C(0xe3cfae), dark=C(0x34383d,{metalness:0.3}), glass=C(0x20384a,{roughness:0.3});
+  function van(x,z,ry){var g=new THREE.Group();box(g,white,1.9,1.5,4.7,0,0.95,0,true);box(g,glass,1.92,0.5,2.4,0,1.35,-0.3,false);box(g,blk,1.7,0.3,0.1,0,0.45,2.36,false);g.position.set(x,0,z);g.rotation.y=ry||0;world.add(g);}
+  function taxi(x,z){var g=new THREE.Group();box(g,yel,1.75,0.7,4.3,0,0.55,0,true);box(g,white,1.6,0.6,2.2,0,1.2,-0.2,true);box(g,glass,1.62,0.35,2.0,0,1.25,-0.2,false);box(g,white,0.5,0.18,0.18,0,1.6,-0.2,false);g.position.set(x,0,z);world.add(g);}
+  function pickup(x,z,ry){var g=new THREE.Group();box(g,white,1.95,1.0,5.4,0,0.75,0,true);box(g,white,1.9,0.6,1.9,0,1.5,-0.9,true);box(g,glass,1.92,0.35,1.7,0,1.55,-0.9,false);g.position.set(x,0,z);g.rotation.y=ry||0;world.add(g);}
+  function awn(x,y,z,w,d,c){var a=new THREE.Mesh(new THREE.BoxGeometry(w,0.05,d),c);a.position.set(x,y,z);a.rotation.z=0.08;a.castShadow=true;world.add(a);}
+  // camionetas blancas tipo van al final del paso (video 2, 0 a 21 s) y taxis amarillo con blanco junto a la malla de la cancha (video 2, 42 a 55 s)
+  van(10.6,11.4); van(0.3,15.5);
+  taxi(24.0,15.4); taxi(36.0,14.6);
+  // el puesto blanco que ya estaba en el paso lleva toldo rojo (video 2, 54 a 58 s) y a su lado el carrito rojo de tacos con bicicleta (video 2, 3 a 7 s y 21 s)
+  awn(14.5,2.45,11.0,3.4,1.6,red);
+  box(world,red,1.2,1.1,0.8,17.7,0.75,9.9,true); awn(17.7,1.75,9.9,1.5,1.1,red); box(world,orn,0.8,0.6,0.04,17.7,1.1,9.48,false); box(world,blk,0.04,0.7,0.04,18.5,0.4,9.8,false);
+  // caseta de block con puerta de herrería y vidrio, refrigerador blanco, llantas en el techo y muro alto de block (video 2, 5 a 13 s), al final del muro del edificio vecino
+  box(world,blockG,2.4,2.6,2.2,-4.8,1.3,10.9,true); box(world,glass,0.05,1.7,0.9,-6.02,1.45,10.5,false); box(world,blk,0.06,2.0,1.1,-6.03,1.05,11.5,false);
+  box(world,dark,2.5,0.12,2.3,-4.8,2.65,10.9,false); [[-5.4,10.5],[-4.6,11.3]].forEach(function(q){cyl(world,blk,0.45,0.45,0.25,q[0],2.84,q[1]);});
+  box(world,white,0.9,0.9,0.7,-6.4,0.5,12.4,true);
+  box(world,blockG,4.8,3.0,0.35,-4.4,1.5,12.3,true);
+  // anexo blanco del vecino con tinaco beige, tanque negro, tambos azules, tambo negro y zanja con mangueras (video 2, 13 a 19 s)
+  box(world,white,3.2,3.0,4.0,12.2,1.5,22.0,true); box(world,glass,0.05,1.0,0.9,10.58,1.6,22.4,false);
+  cyl(world,beige,0.62,0.7,1.4,9.8,0.7,20.2); cyl(world,beige,0.6,0.62,0.15,9.8,1.45,20.2);
+  cyl(world,blk,0.55,0.6,1.0,9.8,0.5,21.4); cyl(world,blue,0.3,0.3,0.9,8.6,0.45,19.4); cyl(world,blue,0.3,0.3,0.9,11.2,0.45,18.6); cyl(world,blk,0.35,0.35,0.95,10.6,0.48,23.2);
+  box(world,C(0x15171a),0.5,0.04,4.2,10.4,0.07,21.0,false);
+  // puesto de lona amarilla y roja (video 2, 13 a 19 s)
+  box(world,C(0xa3302a),1.5,1.5,1.2,7.0,0.85,18.4,true); box(world,white,1.4,0.8,0.7,7.0,0.5,17.5,true); awn(7.0,1.95,18.3,2.0,1.7,yel);
+  // puesto de lona verde y amarilla con malla y letrero "Maruchan" (video 2, 43 a 49 s)
+  box(world,C(0x8a8f94),1.8,2.2,1.2,19.3,1.1,12.6,true); awn(19.3,2.25,12.6,2.2,1.6,grn); awn(19.3,2.3,12.6,2.2,0.7,yel);
+  // cobertizo largo de lámina oscura, abierto hacia el estacionamiento, con postes de madera en diagonal y camionetas Ford debajo (video 2, 19 a 40 s)
+  var gx0=36.5,gx1=44.5,gz0=8.0,gz1=24.0,gy=3.6;
+  var gr=new THREE.Mesh(new THREE.BoxGeometry(gx1-gx0,0.1,gz1-gz0),C(0x3b4046,{metalness:0.35,roughness:0.6}));gr.position.set((gx0+gx1)/2,gy,(gz0+gz1)/2);gr.rotation.z=0.04;gr.castShadow=true;world.add(gr);
+  for(var gzp=gz0+0.5;gzp<=gz1;gzp+=4.0){box(world,C(0x5a5d62),0.14,gy,0.14,gx0+0.2,gy/2,gzp,false);}
+  for(var gwp=0;gwp<3;gwp++){var wp=new THREE.Mesh(new THREE.BoxGeometry(0.12,3.9,0.12),C(0xb8955e));wp.position.set(gx0+1.2,1.8,10.5+gwp*5.5);wp.rotation.z=-0.38;world.add(wp);}
+  box(world,C(0x2a2d31),0.2,gy,gz1-gz0,gx1+0.1,gy/2,(gz0+gz1)/2,false);
+  pickup(41.0,12.5,Math.PI/2); pickup(41.0,17.0,Math.PI/2); pickup(41.0,21.5,Math.PI/2);
+  // edificio naranja vecino con ventanas en franja y anexo blanco, al sur del estacionamiento (video 2, 13 a 19 s; video 5, 14 a 16 s)
+  box(world,orn,18,10,8,30,5,36,false); box(world,white,9,8.4,8,43.5,4.2,36,false);
+  [4.3,7.6].forEach(function(yy){box(world,glass,16.5,1.2,0.06,30,yy,31.97,false);box(world,glass,7.5,1.2,0.06,43.5,yy-0.4,31.97,false);});
 }
 function pinos(){[[23,-15],[30,-16.5],[37,-14]].forEach(function(q){for(var k=0;k<3;k++){var c=new THREE.Mesh(new THREE.ConeGeometry(2.1-k*0.5,4.5,10),M.pine);c.position.set(q[0],3.2+k*2.4,q[1]);c.castShadow=true;world.add(c);}});}
 
@@ -1476,8 +1545,13 @@ function build(){
 
   // suelo
   var gnd=box(world,M.ground,500,0.2,400,2,-0.1,4,false);
-  box(world,M.gravel,58,0.06,14,13,0.03,13.2,false); box(world,M.patio,26,0.06,3.4,31.2,0.03,4.7,false);
-  cancha(26.5,-1,14,8); autos(); techadosParking(); pinos();
+  box(world,M.gravel,58,0.06,14,13,0.03,13.2,false);
+  (function(){var tx=textTex(2048,512,function(x,w,h){x.fillStyle='#6d7071';x.fillRect(0,0,w,h);var sd=7;function rn(){sd=(sd*16807)%2147483647;return sd/2147483647;}
+    for(var i=0;i<90;i++){x.fillStyle='rgba('+(rn()<0.5?'52,56,58':'150,152,150')+','+(0.10+rn()*0.18)+')';x.beginPath();x.ellipse(rn()*w,rn()*h,20+rn()*90,10+rn()*40,rn()*3,0,Math.PI*2);x.fill();}
+    x.strokeStyle='#4d5153';x.lineWidth=3;for(var a=0;a<=58;a+=3.6){x.beginPath();x.moveTo(a/58*w,0);x.lineTo(a/58*w,h);x.stroke();}for(var b=0;b<=14;b+=3.5){x.beginPath();x.moveTo(0,b/14*h);x.lineTo(w,b/14*h);x.stroke();}});
+    var pm=new THREE.MeshStandardMaterial({map:tx,roughness:0.95,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2});
+    var pp=new THREE.Mesh(new THREE.PlaneGeometry(58,14),pm);pp.rotation.x=-Math.PI/2;pp.position.set(13,0.066,13.2);pp.receiveShadow=true;world.add(pp);})(); box(world,M.patio,26,0.06,3.4,31.2,0.03,4.7,false);
+  cancha(26.5,-1,14,8); autos(); techadosParking(); estacionamientoVideo(); pinos();
   // paso peatonal libre: del acceso del plantel, pegado a los barandales, hasta la puerta de la cancha
   box(world,M.pass,30.2,0.02,1.7,6.1,0.08,6.85,false); box(world,M.pass,1.4,0.02,3.7,21.2,0.08,5.15,false);
   // jardinera sobre la banqueta (Google Maps)
@@ -1488,9 +1562,24 @@ function build(){
   box(world,M.roof,25.6,0.25,11.5,-1.4,hb+0.125,0);
   // pretil (N, W, E) y borde sur sin pretil por la canaleta
   box(world,M.pretil,25.6,0.35,0.15,-1.4,rb+0.17,-5.67);
-  box(world,M.navy,0.3,0.3,11.6,-14.25,rb+0.12,0);
+  box(world,M.blueW,0.3,0.3,11.6,-14.25,rb+0.12,0);
   // Cafetería
-  box(world,M.wallC,6.8,hc,11.4,14.8,hc/2,0);
+  if(nb>=2){var ex=11.4+0.02;
+    box(world,M.fbarF,0.06,1.05,3.3,ex,5.25,-0.3,false); box(world,M.glass,0.05,0.9,3.15,ex+0.03,5.25,-0.3,false);
+    box(world,M.fbarF,0.5,0.05,3.6,ex+0.25,5.85,-0.3,false);
+    box(world,M.fbarF,0.06,0.65,0.95,ex,4.1,-0.3,false); box(world,M.glass,0.05,0.5,0.8,ex+0.03,4.1,-0.3,false);
+    box(world,M.fbarF,0.06,1.0,2.0,ex,5.15,-3.9,false); box(world,M.glass,0.05,0.85,1.85,ex+0.03,5.15,-3.9,false);
+    box(world,M.afr,0.06,0.45,2.0,ex,3.75,-3.9,false);}
+  // Cafetería: area techada abierta hacia la cancha (videos 4 y 5): muros N y S, techo de lámina, postes, bancas y mesas
+  box(world,M.wallC,6.8,hc,0.3,14.8,hc/2,-5.55); box(world,M.wallC,6.8,hc,0.3,14.8,hc/2,5.55);
+  box(world,M.patio,6.6,0.05,11.0,14.8,0.05,0,false);
+  (function(){var pst=mat(0xb0472b,{roughness:0.7}),bch=mat(0x1d2023,{roughness:0.6}),tbl=mat(0xe9ebee,{roughness:0.6}),i;
+    [-5.4,-1.85,1.85].forEach(function(zz){box(world,pst,0.14,3.0,0.14,18.1,1.5,zz,true);});
+    box(world,pst,0.12,0.14,11.4,18.1,3.0,0,false);
+    if(nc>1)box(world,M.wallC,0.3,hc-3,11.4,18.05,3+(hc-3)/2,0);
+    [[13.3,-3.0],[13.3,1.9],[15.3,-3.0],[15.3,1.9],[17.2,-3.0],[17.2,1.9]].forEach(function(q){box(world,bch,0.4,0.45,3.8,q[0],0.23,q[1],true);box(world,bch,0.5,0.04,3.8,q[0],0.46,q[1],false);});
+    [[14.3,-3.0],[14.3,1.9],[16.3,-3.0],[16.3,1.9]].forEach(function(q){box(world,tbl,0.8,0.05,3.6,q[0],0.78,q[1],true);[-1.5,1.5].forEach(function(o){box(world,bch,0.06,0.76,0.06,q[0],0.38,q[1]+o,false);});});
+    cyl(world,mat(0x1c5fb0,{roughness:0.6}),0.3,0.3,0.85,18.0,0.43,3.6);})();
   box(world,M.lam,6.8,0.25,11.4,14.8,hc+0.125,0);
   box(world,M.pretil,6.8,0.35,0.15,14.8,rc+0.17,-5.62);
   box(world,M.pretil,6.8,0.35,0.15,14.8,rc+0.17,5.62);
@@ -1501,7 +1590,7 @@ function build(){
   box(world,M.white,3.2,2.3,1.8,14.5,1.45,9.7); box(world,M.sgl,3.0,0.7,0.04,14.5,0.85,8.8,false);
   box(world,M.pipeBl,14.5,0.06,0.06,3.75,0.12,5.75+0.05,false);
   box(world,M.pretil,1.3,0.2,1.3,8.5,rb+0.1,-2.2); cyl(world,M.blackT,0.5,0.5,1.1,8.5,rb+0.75,-2.2); cyl(world,M.blackT,0.35,0.35,0.08,8.5,rb+1.34,-2.2);
-  for(var lc=0;lc<nc;lc++){[-1,1].forEach(function(sg){box(world,M.glass,0.06,1.2,1.8,18.23,lc*3+1.7,sg*3.2,false);});
+  for(var lc=0;lc<nc;lc++){
     box(world,M.glass,1.8,1.2,0.06,13.6,lc*3+1.7,5.73,false);box(world,M.glass,1.8,1.2,0.06,16.2,lc*3+1.7,5.73,false);}
 
   // canaleta Bachillerato (lado sur)
